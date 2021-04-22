@@ -1,0 +1,11 @@
+test
+.gitignore
+publish.bat
+.eslintrc
+yarn.lock
+package-lock.json
+.dfcleaner.config.js
+.editorconfig
+tsconfig.json
+src
+scripts
