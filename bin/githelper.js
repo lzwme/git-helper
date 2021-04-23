@@ -50,8 +50,8 @@ program
   .aliases(['u', 'utils'])
   .description(chalk.yellow(' 提供常用的 git 快捷工具类功能'))
   .option('-b, --head-branch', '获取当前的本地分支名')
-  .option('-i, --commitId', '获取当前分支的 commitId')
-  .option('--remote-id', '获取远端 upstream 的 commitId')
+  .option('-i, --commit-id', '获取当前分支的 commitId')
+  .option('--u-id', '获取远端 upstream 的 commitId')
   .option('--debug', '是否打印调试信息')
   .action((opts) => {
     const cfg = { utils: opts };
@@ -60,9 +60,9 @@ program
 
     if (config.debug) console.log(opts);
 
-    if (opts.headBranch) return getHeadBranch();
-    if (opts.commitId || opts.remoteId) return getHeadCommitId(opts.remoteId);
+    if (opts.headBranch) console.log(chalk.yellowBright('Head Branch:'), getHeadBranch());
+    if (opts.commitId) console.log(chalk.yellowBright('Local CommitId:'), getHeadCommitId(false));
+    if (opts.uId) console.log(chalk.yellowBright('Upstream CommitId:'), getHeadCommitId(true));
   });
-
 
 program.parse(process.argv);
