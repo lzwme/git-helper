@@ -2,22 +2,24 @@
  * @Author: lzw
  * @Date: 2021-04-22 20:14:35
  * @LastEditors: lzw
- * @LastEditTime: 2021-04-23 09:59:26
+ * @LastEditTime: 2021-04-24 13:01:58
  * @Description:
  */
 
-import chalk from "chalk";
-import fs from "fs";
-import path from "path";
+import chalk from 'chalk';
+import fs from 'fs';
+import path from 'path';
 import { assign } from './utils';
 
 export interface IConfig {
   /** 用户自定义文件的路径 */
   configPath?: string;
   /** 根目录，默认为当前执行目录 */
-  baseDir: string;
+  baseDir?: string;
   /** 是否打印调试信息 */
   debug?: boolean;
+  /** 开启静默模式，只打印必要的信息 */
+  silent?: boolean;
   /** cm 命令相关的配置 */
   commit?: {
     /** commit 后是否执行 pull <rebase> */
@@ -35,8 +37,8 @@ export interface IConfig {
   };
 }
 
-const config: IConfig = {
-  configPath: ".git-helper.config.js",
+export const config: IConfig = {
+  configPath: '.git-helper.config.js',
   baseDir: process.cwd(),
   debug: false,
   commit: {},
@@ -60,6 +62,10 @@ export function getConfig(options?: IConfig, useCache = true) {
 
   // 直接入参的优先级最高
   if (options) assign(config, options);
+
+  // 默认参数设置
+  if (null == config.commit.pull) config.commit.pull = true;
+  if (config.debug) config.silent = true;
 
   return config;
 }

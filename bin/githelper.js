@@ -1,25 +1,26 @@
 #!/usr/bin/env node
-
+// @ts-check
 const { program } = require('commander');
 const pkg = require('../package.json');
 const chalk = require('chalk');
 const { getConfig, gitCommit, assign, getHeadBranch, getHeadCommitId } = require('../');
 
 let config = getConfig(null, false);
-const initConfig = (cfg) => {
+const initConfig = cfg => {
   const options = program.opts();
   assign(options, cfg);
   config = getConfig(options, false);
 
   if (config.debug) console.log(chalk.cyanBright('CONFIG:'), config);
-}
+};
 
 program
-    .aliases(['gh'])
-    .version(pkg.version, '-v, --version')
-    .description(chalk.yellow(pkg.description) + ` [version@${chalk.cyanBright(pkg.version)}]`)
-    .option('-c, --config-path [filepath]', `配置文件 ${chalk.yellow(config.configPath)} 的路径`)
-    .option('--debug', `开启调试模式。`, false);
+  .aliases(['gh'])
+  .version(pkg.version, '-v, --version')
+  .description(chalk.yellow(pkg.description) + ` [version@${chalk.cyanBright(pkg.version)}]`)
+  .option('-c, --config-path [filepath]', `配置文件 ${chalk.yellow(config.configPath)} 的路径`)
+  .option('-s, --silent', '开启静默模式，只打印必要的信息')
+  .option('--debug', `开启调试模式。`, false);
 
 program
   .command('commit')
@@ -31,33 +32,26 @@ program
   .option('-n, --noVerify', '是否跳过 git hooks')
   .option('-p, --push', '是否执行 git push')
   .option('--no-push', '是否不执行 git push')
-  .option('--pull', '是否执行 git pull --rebase', true)
+  .option('--pull', '是否执行 git pull --rebase')
   .option('--no-pull', '是否不执行 git pull --rebase')
-  .option('--debug', '是否打印调试信息')
-  .action((commit) => {
-    if (commit.messageReg) commit.messageReg = new RegExp(commit.messageReg);
+  .action(opts => {
+    if (opts.messageReg) opts.messageReg = new RegExp(opts.messageReg);
 
-    const cfg = { commit };
-    if (commit.debug) cfg.debug = true;
-    initConfig(cfg);
-    if (config.debug) console.log(commit);
+    initConfig({ commit: opts });
+    if (config.debug) console.log(opts);
 
     gitCommit(null);
   });
 
-  program
+program
   .command('util')
   .aliases(['u', 'utils'])
   .description(chalk.yellow(' 提供常用的 git 快捷工具类功能'))
   .option('-b, --head-branch', '获取当前的本地分支名')
   .option('-i, --commit-id', '获取当前分支的 commitId')
   .option('--u-id', '获取远端 upstream 的 commitId')
-  .option('--debug', '是否打印调试信息')
-  .action((opts) => {
-    const cfg = { utils: opts };
-    if (opts.debug) cfg.debug = true;
-    initConfig(cfg);
-
+  .action(opts => {
+    // initConfig({ utils: opts });
     if (config.debug) console.log(opts);
 
     if (opts.headBranch) console.log(chalk.yellowBright('Head Branch:'), getHeadBranch());
