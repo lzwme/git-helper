@@ -77,7 +77,7 @@ export function gitCommit(cfg = config) {
   const cmds = [
     !config.silent ? 'git status --short' : '',
     // commitCfg.message && commitCfg.amend ? "git reset HEAD" : "",
-    'git add *',
+    'git add --all',
     commit,
     commitCfg.pull ? `git pull --rebase` + (config.debug ? ' -v' : '') : '',
     commitCfg.push ? `git push` + (config.debug ? ' -v --progress' : '') : '',
