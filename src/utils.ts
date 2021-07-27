@@ -2,11 +2,12 @@
  * @Author: lzw
  * @Date: 2021-04-22 20:13:10
  * @LastEditors: lzw
- * @LastEditTime: 2021-04-24 13:05:08
+ * @LastEditTime: 2021-07-27 19:23:55
  * @Description:
  */
 import childProcess from 'child_process';
 import { config } from './config';
+import chalk from 'chalk';
 
 export interface PlanObject {
   [key: string]: any;
@@ -33,4 +34,8 @@ export function assign(a: PlanObject, b: PlanObject) {
   }
 
   return a;
+}
+
+export function log(...args: string[]) {
+  console.log(`[${chalk.cyanBright(new Date().toTimeString().slice(0, 8))}]`, ...args);
 }

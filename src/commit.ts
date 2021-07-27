@@ -2,13 +2,13 @@
  * @Author: lzw
  * @Date: 2021-04-22 14:51:05
  * @LastEditors: lzw
- * @LastEditTime: 2021-04-24 12:55:51
+ * @LastEditTime: 2021-07-27 19:22:40
  * @Description: git commit 提交辅助工具
  */
 
 import chalk from 'chalk';
 import { getConfig } from './config';
-import { execSync, assign } from './utils';
+import { execSync, assign, log } from './utils';
 import { getHeadCommitId } from './git-utils';
 
 /** 缓存的全局对象 */
@@ -17,10 +17,10 @@ const config = getConfig(null, false);
 function getGitHead(remote = false) {
   try {
     const commitId = getHeadCommitId(remote);
-    if (config.debug) console.log(`${remote ? 'REMOTE' : 'LOCAL'} ID: ${commitId}`);
+    if (config.debug) log(`${remote ? 'REMOTE' : 'LOCAL'} ID: ${commitId}`);
     return commitId;
   } catch (e) {
-    console.log(e.stderr ? chalk.redBright(e.stderr) : e);
+    log(e.stderr ? chalk.redBright(e.stderr) : e);
   }
 
   return '';
@@ -47,7 +47,7 @@ function checkcommitCfg() {
   }
 
   if (errmsg) {
-    console.log(chalk.redBright(errmsg));
+    log(chalk.redBright(errmsg));
     help();
   }
 
@@ -60,7 +60,7 @@ export function gitCommit(cfg = config) {
   const commitCfg = config.commit;
 
   if (config.debug) {
-    console.log(chalk.cyanBright('开始执行 git commit 相关动作'));
+    log(chalk.cyanBright('开始执行 git commit 相关动作'));
   }
   if (!checkcommitCfg()) return;
 
@@ -85,10 +85,10 @@ export function gitCommit(cfg = config) {
 
   for (const cmd of cmds) {
     try {
-      console.log(chalk.yellowBright('执行命令：'), chalk.cyanBright(cmd));
+      log(chalk.yellowBright('执行命令：'), chalk.cyanBright(cmd));
       execSync(cmd);
     } catch (e) {
-      console.log(e);
+      log(e);
       break;
     }
   }

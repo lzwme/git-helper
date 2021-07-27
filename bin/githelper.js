@@ -5,6 +5,7 @@ const pkg = require('../package.json');
 const chalk = require('chalk');
 const { getConfig, gitCommit, assign, getHeadBranch, getHeadCommitId } = require('../');
 
+const startTime = Date.now();
 let config = getConfig(null, false);
 const initConfig = cfg => {
   const options = program.opts();
@@ -41,6 +42,7 @@ program
     if (config.debug) console.log(opts);
 
     gitCommit(null);
+    logEnd();
   });
 
 program
@@ -49,14 +51,20 @@ program
   .description(chalk.yellow(' 提供常用的 git 快捷工具类功能'))
   .option('-b, --head-branch', '获取当前的本地分支名')
   .option('-i, --commit-id', '获取当前分支的 commitId')
-  .option('--u-id', '获取远端 upstream 的 commitId')
+  .option('-u, --upstream-id', '获取远端 upstream 的 commitId')
   .action(opts => {
     // initConfig({ utils: opts });
     if (config.debug) console.log(opts);
 
     if (opts.headBranch) console.log(chalk.yellowBright('Head Branch:'), getHeadBranch());
     if (opts.commitId) console.log(chalk.yellowBright('Local CommitId:'), getHeadCommitId(false));
-    if (opts.uId) console.log(chalk.yellowBright('Upstream CommitId:'), getHeadCommitId(true));
+    if (opts.upstreamId) console.log(chalk.yellowBright('Upstream CommitId:'), getHeadCommitId(true));
+    logEnd();
   });
 
 program.parse(process.argv);
+
+function logEnd() {
+  const constTime = Date.now() - startTime;
+  console.log(`\n[${chalk.greenBright(new Date().toTimeString().slice(0, 8))}] Done in ${constTime}ms.`);
+}
