@@ -1,5 +1,5 @@
 [![Code Climate](https://lzw.me/images/logo.png)](https://lzw.me)
-[![@lzwme/git-helper](https://nodei.co/npm/@lzwme/git-helper.png)](npm-url)
+[![@lzwme/git-helper](https://nodei.co/npm/@lzwme/git-helper.png)][npm-url]
 
 # @lzwme/git-helper
 
