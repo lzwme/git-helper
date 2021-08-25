@@ -3,7 +3,7 @@
 const { program } = require('commander');
 const pkg = require('../package.json');
 const chalk = require('chalk');
-const { getConfig, gitCommit, assign, getHeadBranch, getHeadCommitId } = require('../');
+const { getConfig, gitCommit, assign, getHeadBranch, getHeadCommitId, getUserEmail } = require('../');
 
 const startTime = Date.now();
 let config = getConfig(null, false);
@@ -52,6 +52,7 @@ program
   .option('-b, --head-branch', '获取当前的本地分支名')
   .option('-i, --commit-id', '获取当前分支的 commitId')
   .option('-u, --upstream-id', '获取远端 upstream 的 commitId')
+  .option('-e, --user-email', 'get user email')
   .action(opts => {
     // initConfig({ utils: opts });
     if (config.debug) console.log(opts);
@@ -59,6 +60,7 @@ program
     if (opts.headBranch) console.log(chalk.yellowBright('Head Branch:'), getHeadBranch());
     if (opts.commitId) console.log(chalk.yellowBright('Local CommitId:'), getHeadCommitId(false));
     if (opts.upstreamId) console.log(chalk.yellowBright('Upstream CommitId:'), getHeadCommitId(true));
+    if (opts.userEmail)  console.log(chalk.yellowBright('User Email:'), getUserEmail());
     logEnd();
   });
 

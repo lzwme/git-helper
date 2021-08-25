@@ -2,16 +2,15 @@
  * @Author: lzw
  * @Date: 2021-04-22 20:13:10
  * @LastEditors: lzw
- * @LastEditTime: 2021-08-25 21:14:12
+ * @LastEditTime: 2021-08-25 21:30:06
  * @Description:
  */
 import childProcess from 'child_process';
 import { config } from './config';
 import chalk from 'chalk';
 
-export interface PlanObject {
-  [key: string]: unknown;
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type PlanObject = Record<string, any>;
 
 export function execSync(cmd, stdio?: childProcess.StdioOptions, cwd?: string) {
   if (!cwd) cwd = config.baseDir;

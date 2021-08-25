@@ -2,7 +2,7 @@
  * @Author: lzw
  * @Date: 2021-04-23 10:44:32
  * @LastEditors: lzw
- * @LastEditTime: 2021-08-25 21:23:04
+ * @LastEditTime: 2021-08-25 21:41:37
  * @Description: gh u 相关的命令。主要为常用的快捷工具方法
  */
 
@@ -47,9 +47,18 @@ interface GitLogItem {
 
 /** 获取当前的本地分支名 */
 export function getHeadBranch() {
-  const config = getConfig(null, true);
-  const head = fs.readFileSync(path.resolve(config.baseDir, './.git/HEAD'), { encoding: 'utf-8' });
-  let branch = head.split('refs/heads/')[1];
+  // 支持在 Jenkins CI 中从环境变量直接获取
+  let branch = process.env.CI_COMMIT_REF_NAME;
+
+  if (!branch) {
+    const config = getConfig(null, true);
+    const headPath = path.resolve(config.baseDir, './.git/HEAD');
+
+    if (fs.existsSync(headPath)) {
+      const head = fs.readFileSync(headPath, { encoding: 'utf-8' });
+      branch = head.split('refs/heads/')[1];
+    }
+  }
 
   if (!branch) {
     // exec 速度比较慢
@@ -92,4 +101,9 @@ export function getGitLogList(num = 1, cwd?: string) {
         return r;
       }, {});
     });
+}
+
+/** 获取 git user eamil 地址 */
+export function getUserEmail() {
+  execSync('git config --get user.email', 'pipe');
 }
