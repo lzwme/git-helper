@@ -2,7 +2,7 @@
  * @Author: lzw
  * @Date: 2021-04-22 20:14:35
  * @LastEditors: lzw
- * @LastEditTime: 2021-04-24 13:01:58
+ * @LastEditTime: 2021-08-25 21:11:15
  * @Description:
  */
 
@@ -54,6 +54,7 @@ export function getConfig(options?: IConfig, useCache = true) {
 
   const configPath = path.resolve(config.configPath);
   if (fs.existsSync(configPath)) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const cfg: IConfig = require(configPath);
     assign(config, cfg);
   } else if (config.debug) {

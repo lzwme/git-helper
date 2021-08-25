@@ -2,7 +2,7 @@
  * @Author: lzw
  * @Date: 2021-04-22 20:13:10
  * @LastEditors: lzw
- * @LastEditTime: 2021-07-27 19:23:55
+ * @LastEditTime: 2021-08-25 21:14:12
  * @Description:
  */
 import childProcess from 'child_process';
@@ -10,7 +10,7 @@ import { config } from './config';
 import chalk from 'chalk';
 
 export interface PlanObject {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export function execSync(cmd, stdio?: childProcess.StdioOptions, cwd?: string) {
@@ -20,6 +20,7 @@ export function execSync(cmd, stdio?: childProcess.StdioOptions, cwd?: string) {
   if (res) return res.toString().trim();
 }
 
+/** 简易的对象深复制 */
 export function assign(a: PlanObject, b: PlanObject) {
   if (!a || !b) return a;
   if (typeof b !== 'object') return b;
@@ -29,7 +30,7 @@ export function assign(a: PlanObject, b: PlanObject) {
       a[key] = b[key];
     } else {
       if (!a[key]) a[key] = {};
-      assign(a[key], b[key]);
+      assign(a[key] as PlanObject, b[key] as PlanObject);
     }
   }
 

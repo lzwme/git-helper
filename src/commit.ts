@@ -2,7 +2,7 @@
  * @Author: lzw
  * @Date: 2021-04-22 14:51:05
  * @LastEditors: lzw
- * @LastEditTime: 2021-07-27 19:22:40
+ * @LastEditTime: 2021-08-25 16:56:42
  * @Description: git commit 提交辅助工具
  */
 
@@ -88,7 +88,7 @@ export function gitCommit(cfg = config) {
       log(chalk.yellowBright('执行命令：'), chalk.cyanBright(cmd));
       execSync(cmd);
     } catch (e) {
-      log(e);
+      log(e.message || e.code || e.status, e);
       break;
     }
   }
