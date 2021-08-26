@@ -2,7 +2,7 @@
  * @Author: lzw
  * @Date: 2021-04-23 10:44:32
  * @LastEditors: lzw
- * @LastEditTime: 2021-08-25 21:41:37
+ * @LastEditTime: 2021-08-26 09:10:48
  * @Description: gh u 相关的命令。主要为常用的快捷工具方法
  */
 
@@ -105,5 +105,5 @@ export function getGitLogList(num = 1, cwd?: string) {
 
 /** 获取 git user eamil 地址 */
 export function getUserEmail() {
-  execSync('git config --get user.email', 'pipe');
+  return execSync('git config --get user.email', 'pipe');
 }

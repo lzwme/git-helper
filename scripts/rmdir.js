@@ -20,6 +20,8 @@ const rmdir = (dir) => {
 
     if (fileStat.isFile()) fs.unlinkSync(filePath);
   }
+
+  fs.rmdirSync(dir);
 }
 
 const start = () => {

@@ -24,5 +24,5 @@ test('gitUtils.getHeadDiffFileList', t => {
 });
 
 test('gitUtils.getUserEmail', t => {
-  t.true(typeof gitUtils.getUserEmail() === 'string');
+  t.true(gitUtils.getUserEmail().length > 0);
 });
