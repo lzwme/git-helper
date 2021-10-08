@@ -13,7 +13,7 @@
 
 一个基于 `Node.js` 的简单的 `git commit` 等操作的辅助性工具。
 
-在中大型前端项目的开发中，为了编码规范与质量保障，基本都会配置 husky、lint-staged 等 githooks 工具来约束 git 提交的规范性检测，如 commitlint、ESLint、prettier、单元测试等等。
+在中大型前端项目的开发中，为了编码规范与质量保障，基本都会配置 husky、lint-staged 等 githooks 工具来约束 git 提交的规范性检测，如 commitlint、ESLint、StyleLint、prettier、单元测试等等。
 
 这些约束在保障开发提交规范性的同时，也大大的增加了 `git commit` 的执行时间，随着项目开发周期的增长和复杂度的提升，带来的开发体验也会越来越糟糕。
 

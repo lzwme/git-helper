@@ -2,11 +2,11 @@
  * @Author: lzw
  * @Date: 2021-04-22 14:51:05
  * @LastEditors: lzw
- * @LastEditTime: 2021-08-25 16:56:42
+ * @LastEditTime: 2021-10-08 17:36:39
  * @Description: git commit 提交辅助工具
  */
 
-import chalk from 'chalk';
+import { color as chalk } from 'console-log-colors';
 import { getConfig } from './config';
 import { execSync, assign, log } from './utils';
 import { getHeadCommitId } from './git-utils';

@@ -2,11 +2,11 @@
  * @Author: lzw
  * @Date: 2021-04-22 20:14:35
  * @LastEditors: lzw
- * @LastEditTime: 2021-08-25 21:11:15
+ * @LastEditTime: 2021-10-08 17:42:58
  * @Description:
  */
 
-import chalk from 'chalk';
+import { color } from 'console-log-colors';
 import fs from 'fs';
 import path from 'path';
 import { assign } from './utils';
@@ -58,7 +58,7 @@ export function getConfig(options?: IConfig, useCache = true) {
     const cfg: IConfig = require(configPath);
     assign(config, cfg);
   } else if (config.debug) {
-    console.log(chalk.yellowBright(`配置文件不存在：${configPath}`));
+    console.log(color.yellowBright(`配置文件不存在：${configPath}`));
   }
 
   // 直接入参的优先级最高
