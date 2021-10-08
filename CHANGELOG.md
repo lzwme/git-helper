@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/lzwme/git-helper/compare/v1.3.0...v1.4.0) (2021-10-08)
+
+
+### Features
+
+* 增加 util --user-email 获取 git 用户邮箱的快捷命令 ([7517da5](https://github.com/lzwme/git-helper/commit/7517da55075cc3cdefc6671b18ee7dbfca61fc56))
+
 ## 1.3.0 (2021-06-13)
 
 ### Bug Fixes

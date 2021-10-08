@@ -1,6 +1,6 @@
 {
   "name": "@lzwme/git-helper",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "一个简单的 git 提交等操作的辅助小工具",
   "main": "build/main/index.js",
   "browser": "build/main/index.js",
