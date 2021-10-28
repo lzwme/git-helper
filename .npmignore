@@ -8,6 +8,7 @@ tsconfig.eslint.json
 .gitlab-ci.yml
 .circleci/*
 .github
+.prettierrc
 .prettierignore
 .vscode
 build/docs
@@ -15,10 +16,16 @@ build/docs
 coverage
 .nyc_output
 *.log
+package-lock.json
 yarn.lock
+pnpm-lock.yaml
 commitlint.config.js
 .editorconfig
 publish.bat
 .yarnrc
 .eslintrc.json
+.eslintrc.js
 .grs.config.js
+.git-helper.config.js
+docs
+scripts
