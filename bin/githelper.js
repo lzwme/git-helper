@@ -33,8 +33,8 @@ program
   .option('-n, --noVerify', '是否跳过 git hooks')
   .option('-p, --push', '是否执行 git push')
   .option('--no-push', '是否不执行 git push')
-  .option('--pull', '是否执行 git pull --rebase')
-  .option('--no-pull', '是否不执行 git pull --rebase')
+  .option('-P, --pull', '是否执行 git pull --rebase')
+  .option('-N, --no-pull', '是否不执行 git pull --rebase')
   .action(opts => {
     if (opts.messageReg) opts.messageReg = new RegExp(opts.messageReg);
 
