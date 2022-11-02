@@ -37,7 +37,9 @@ module.exports = {
     ignorePatterns: [
         '**/node_modules/**',
         'dist/**',
-        'build/**',
+        'cjs/**',
+        'esm/**',
+        'docs/**',
         'mock/**',
         '**/*.js',
         '**/*.d.ts',
