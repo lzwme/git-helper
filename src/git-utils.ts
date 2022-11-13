@@ -89,18 +89,17 @@ export function getHeadDiffFileList(headIndex = 0, cwd?: string) {
 export function getGitLogList(num = 1, cwd?: string) {
   num = Math.max(1, +num || 1);
   const prettyFormat = ['H', 'h', 'T', 't', 'p', 'P', 'cd', 'ad', 'an', 'ae', 'ce', 's', 'ar', 'cr'];
-  const cmd = `git log -${num} --pretty="tformat:%${prettyFormat.join(' $$$ %')}" --date=iso`;
+  const cmd = `git log -${num} --pretty="tformat:%${prettyFormat.join(' _-_ %')}" --date=iso`;
+  const list = execSync(cmd, 'pipe', cwd).trim().split('\n');
+  const result = list.map(line => {
+    const valList = line.split(' _-_ ');
+    return prettyFormat.reduce((r: Partial<GitLogItem>, key: string, idx: number) => {
+      r[key] = valList[idx];
+      return r;
+    }, {});
+  });
 
-  return execSync(cmd, 'pipe', cwd)
-    .trim()
-    .split('\n')
-    .map(line => {
-      const valList = line.split(' $$$ ');
-      return prettyFormat.reduce((r: Partial<GitLogItem>, key: string, idx: number) => {
-        r[key] = valList[idx];
-        return r;
-      }, {});
-    });
+  return result;
 }
 
 /** 获取 git user eamil 地址 */
