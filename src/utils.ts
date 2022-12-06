@@ -5,19 +5,19 @@
  * @LastEditTime: 2021-10-08 17:42:46
  * @Description:
  */
-import childProcess from 'child_process';
+import { execSync as cpExecSync, type StdioOptions } from 'node:child_process';
 import { config } from './config';
 import { color } from 'console-log-colors';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type PlanObject = Record<string, any>;
 
-export function execSync(cmd, stdio?: childProcess.StdioOptions, cwd?: string) {
+export function execSync(cmd, stdio?: StdioOptions, cwd?: string) {
   if (!cwd) cwd = config.baseDir;
   if (!stdio) stdio = config.silent ? 'pipe' : 'inherit';
   if (config.debug) console.log(color.cyanBright('exec cmd:'), color.yellowBright(cmd), color.cyan(cwd));
-  const res = childProcess.execSync(cmd, { stdio, encoding: 'utf8', cwd });
-  if (res) return res.toString().trim();
+  const res = cpExecSync(cmd, { stdio, encoding: 'utf8', cwd });
+  return res == null ? '' : res.toString().trim();
 }
 
 /** 简易的对象深复制 */

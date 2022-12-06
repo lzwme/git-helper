@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { StdioOptions } from 'child_process';
+import { type StdioOptions } from 'node:child_process';
 import { program } from 'commander';
 import { color } from 'console-log-colors';
 import { getConfig, gitCommit, assign, getHeadBranch, getHeadCommitId, getUserEmail, getHeadDiffFileList, execSync } from './index';
@@ -70,8 +70,8 @@ program
 
     if (opts.update || opts.cmds?.includes('update')) {
       const label = `stash_${Date.now()}`;
-      const changed = getHeadDiffFileList();
-
+      const changed = getHeadDiffFileList(0, config.baseDir);
+      if (programOpts.debug) console.log('changed', changed);
       config.run.cmds.update.list = [
         changed.length > 0 ? `git stash save ${label}` : '',
         `git pull -r -n`,
@@ -93,9 +93,9 @@ program
     }
 
     for (const [groupName, item] of Object.entries(cmds)) {
-      console.log(`> Run for group: ${color.greenBright(item.desc || groupName)}`);
+      console.log(`> Run For Group: ${color.cyan(item.desc || groupName)}`);
       for (const cmd of item.list) {
-        console.log(` - Run cmd: ${color.green(cmd)}`);
+        console.log(` - [cmd]: ${color.greenBright(cmd)}`);
         execSync(cmd, stdio, config.baseDir);
       }
     }
