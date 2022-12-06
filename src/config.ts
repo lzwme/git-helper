@@ -35,6 +35,16 @@ export interface IConfig {
     /** 提交注释的验证规则，不符合规则的提交会被阻止 */
     messageReg?: RegExp;
   };
+  run?: {
+    /** 要执行的命令组 */
+    cmds?: Record<
+      string,
+      {
+        desc?: string;
+        list: string[];
+      }
+    >;
+  };
 }
 
 export const config: IConfig = {
@@ -42,6 +52,14 @@ export const config: IConfig = {
   baseDir: process.cwd(),
   debug: false,
   commit: {},
+  run: {
+    cmds: {
+      update: {
+        desc: 'git update from remote',
+        list: [],
+      },
+    },
+  },
 };
 
 /**

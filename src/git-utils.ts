@@ -79,7 +79,8 @@ export function getHeadCommitId(isRemote = false) {
  * @param headIndex HEAD 顺序，默认为 0，即最新的本地未提交变更
  */
 export function getHeadDiffFileList(headIndex = 0, cwd?: string) {
-  return execSync(`git diff HEAD~${headIndex} --name-only`, 'pipe', cwd).trim().split('\n');
+  const stdout = execSync(`git diff HEAD~${headIndex} --name-only`, 'pipe', cwd).trim();
+  return stdout ? stdout.split('\n') : [];
 }
 
 /**

@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
+import { StdioOptions } from 'child_process';
 import { program } from 'commander';
 import { color } from 'console-log-colors';
-import { getConfig, gitCommit, assign, getHeadBranch, getHeadCommitId, getUserEmail } from './index';
+import { getConfig, gitCommit, assign, getHeadBranch, getHeadCommitId, getUserEmail, getHeadDiffFileList, execSync } from './index';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -23,7 +24,7 @@ program
   .aliases(['gh'])
   .version(pkg.version, '-v, --version')
   .description(color.yellow(pkg.description) + ` [version@${color.cyanBright(pkg.version)}]`)
-  .option('-c, --config-path [filepath]', `配置文件 ${color.yellow(config.configPath)} 的路径`)
+  .option('-c, --config-path <filepath>', `配置文件 ${color.yellow(config.configPath)} 的路径`)
   .option('-s, --silent', '开启静默模式，只打印必要的信息')
   .option('--debug', `开启调试模式。`, false);
 
@@ -47,6 +48,57 @@ program
 
     gitCommit();
     logEnd();
+  });
+
+program
+  .command('run')
+  .description(color.yellow(` 执行一组或多组（内置的或在配置文件中定义的）预定义命令`))
+  .option(`-l, --list`, `查看可执行的命令组`)
+  .option(`-u, --update`, `更新：${color.cyan('stash & pull --rebase & stash')}`)
+  .option(`-g, --group <groupName...>`, `指定预定义的命令组名。可指定多个，按顺序执行命令组`)
+  .action((opts: { list?: boolean; update?: boolean; cmds?: string[] }) => {
+    const cmds: typeof config['run']['cmds'] = {};
+    const programOpts = program.opts();
+    const stdio: StdioOptions = programOpts.silent ? 'pipe' : 'inherit';
+    if (programOpts.debug) console.log(opts, programOpts);
+
+    if (opts.list) {
+      const list = Object.keys(config.run.cmds).concat(['update']);
+      console.log(`可用的命令组：${color.cyanBright(`\n - ${list.join('\n - ')}`)}`);
+      return;
+    }
+
+    if (opts.update || opts.cmds?.includes('update')) {
+      const label = `stash_${Date.now()}`;
+      const changed = getHeadDiffFileList();
+
+      config.run.cmds.update.list = [
+        changed.length > 0 ? `git stash save ${label}` : '',
+        `git pull -r -n`,
+        changed.length > 0 ? `git stash pop ${label}` : '',
+      ].filter(Boolean);
+      cmds.update = config.run.cmds.update;
+    }
+
+    if (Array.isArray(opts.cmds)) {
+      opts.cmds.forEach(groupName => {
+        if (config.run.cmds[groupName]) cmds[groupName] = config.run.cmds[groupName];
+        else console.warn(color.yellow(`未知的命令组：`), color.yellowBright(groupName));
+      });
+    }
+
+    if (Object.keys(cmds).length === 0) {
+      console.log(color.red('未指定任何有效的命令组'));
+      return;
+    }
+
+    for (const [groupName, item] of Object.entries(cmds)) {
+      console.log(`> Run for group: ${color.greenBright(item.desc || groupName)}`);
+      for (const cmd of item.list) {
+        console.log(` - Run cmd: ${color.green(cmd)}`);
+        execSync(cmd, stdio, config.baseDir);
+      }
+    }
   });
 
 program
