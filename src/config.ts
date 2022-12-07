@@ -7,8 +7,8 @@
  */
 
 import { color } from 'console-log-colors';
-import fs from 'fs';
-import path from 'path';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { assign } from './utils';
 
 export interface IConfig {
@@ -70,8 +70,8 @@ export function getConfig(options?: IConfig, useCache = true) {
 
   if (options && options.configPath) config.configPath = options.configPath;
 
-  const configPath = path.resolve(config.configPath);
-  if (fs.existsSync(configPath)) {
+  const configPath = resolve(config.configPath);
+  if (existsSync(configPath)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const cfg: IConfig = require(configPath);
     assign(config, cfg);

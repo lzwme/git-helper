@@ -1,10 +1,5 @@
-src
-test
-test-cases
-tsconfig.json
-tsconfig.module.json
-tsconfig.eslint.json
-.travis.yml
+# config
+/tsconfig.*
 .gitlab-ci.yml
 .circleci/*
 .github
@@ -15,16 +10,27 @@ tsconfig.eslint.json
 coverage
 .nyc_output
 *.log
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
 commitlint.config.js
 .editorconfig
-publish.bat
 .yarnrc
 .eslintrc.json
 .eslintrc.js
 .grs.config.js
 .git-helper.config.js
-docs
-scripts
+CHANGELOG.md
+
+# packageManager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# dirs
+/src
+/docs
+/scripts
+/esm
+test
+test-cases
+tmp
+cache
+

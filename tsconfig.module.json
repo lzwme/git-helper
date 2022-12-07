@@ -1,11 +1,11 @@
 {
-  "extends": "./tsconfig",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
+    "declaration": true,
     "outDir": "esm",
-    "module": "esnext"
+    "target": "ES2022",
+    "module": "NodeNext"
   },
-  "exclude": [
-    "node_modules/**"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules/**", "__test__", "src/**/*.spec.ts"]
 }

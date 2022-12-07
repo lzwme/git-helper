@@ -19,7 +19,8 @@ function getGitHead(remote = false) {
     const commitId = getHeadCommitId(remote);
     if (config.debug) log(`${remote ? 'REMOTE' : 'LOCAL'} ID: ${commitId}`);
     return commitId;
-  } catch (e) {
+  } catch (error) {
+    const e = error as any;
     log(e.stderr ? chalk.redBright(e.stderr) : e);
   }
 
@@ -87,11 +88,11 @@ export function gitCommit(cfg = config) {
     try {
       log(chalk.yellowBright('执行命令：'), chalk.cyanBright(cmd));
       execSync(cmd);
-    } catch (e) {
-      log(e.message || e.code || e.status, e);
+    } catch (error) {
+      const e = error as Error;
+      log(e.message || e);
       break;
     }
   }
 }
 
-// gitHelper.start();

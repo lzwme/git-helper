@@ -37,6 +37,6 @@ export function assign(a, b) {
   return a;
 }
 
-export function log(...args: string[]) {
+export function log(...args: unknown[]) {
   console.log(`[${color.cyanBright(new Date().toTimeString().slice(0, 8))}]`, ...args);
 }
