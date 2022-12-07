@@ -52,6 +52,7 @@ program
 
 program
   .command('run')
+  .alias('r')
   .description(color.yellow(` 执行一组或多组（内置的或在配置文件中定义的）预定义命令`))
   .option(`-l, --list`, `查看可执行的命令组`)
   .option(`-u, --update`, `更新：${color.cyan('stash & pull --rebase & stash')}`)
