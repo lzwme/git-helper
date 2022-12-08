@@ -70,13 +70,13 @@ program
     }
 
     if (opts.update || opts.cmds?.includes('update')) {
-      const label = `stash_${Date.now()}`;
+      const label = `gh_${Date.now()}`;
       const changed = getHeadDiffFileList(0, config.baseDir);
       if (programOpts.debug) console.log('changed', changed);
       config.run.cmds.update.list = [
         changed.length > 0 ? `git stash save ${label}` : '',
         `git pull -r -n`,
-        changed.length > 0 ? `git stash pop ${label}` : '',
+        changed.length > 0 ? `git stash pop` : '',
       ].filter(Boolean);
       cmds.update = config.run.cmds.update;
     }
