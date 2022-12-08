@@ -30,24 +30,29 @@ git push
 
 你也可以结合一些 git 客户端提供的工作流功能一起辅助性配置该流程。
 
-## 安装
+## INSTALL
+
+npm global install:
 
 ```bash
-# 全局安装
 npm i -g @lzwme/git-helper
-# 验证是否成功
 gh --help
 ```
 
-![](docs/img/githelper-commit-amend.png)
+or use `npx`:
 
-## 使用
+```bash
+npx @lzwme/git-helper -h
+```
 
-### 帮助信息
+![](public/img/githelper-commit-amend.png)
+
+## Useage
 
 ```bash
 githelper --help
-githelper commit --help
+gh commit --help
+gh run --helper
 ```
 
 **提示：**
@@ -57,10 +62,53 @@ githelper commit --help
 - `githelper commit` 命令也有短别名 `gh cm`、`gh c`
 - More...
 
+示例：
+
+```bash
+# git add & git commit & git pull --rebase & git push
+gh c -m "chore: update deps" -p
+
+# git add & git commit --no-veify & git pull --rebase & git push
+gh c -m "chore: update deps" -p -n
+
+# git add & # git commit --no-veify & git push
+gh c -m "chore: update deps" -p -n -N
+
+# git add & git commit --amend
+gh c --amend -m "chore: update deps"
+
+# git update
+gh r -u
+```
+
 ## 配置文件
 
-配置文件名称为 `.git-helper.config.js`， 默认在当前项目执行目录下，也可以通过命令行参数 `-c` 指定。
-它主要用于配置特定项目的确定性参数，例如 `messageReg` 提交注释规范约束、`push` 默认是否执行 push 等。
+配置文件名称为 `.git-helper.config.js`， 默认在当前项目执行目录下，也可以通过命令行参数 `-c` 指定。示例：
+
+```ts
+// .git-helper.config.js
+
+/**
+ * @type {import('@lzwme/git-helper').IConfig}
+ */
+ module.exports = {
+  debug: false,
+  baseDir: process.cwd(),
+  commit: {
+    messageReg: /^(fix|feat|pref|test|doc):.+/,
+    push: true,
+    noVerify: false,
+  },
+  run: {
+    cmds: {
+      test: {
+        desc: 'test',
+        list: ['npm run lint', 'npm run test']
+      },
+    },
+  },
+};
+```
 
 配置文件是可以缺省的，命令行参数的优先级比它更高。
 
