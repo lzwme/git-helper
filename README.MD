@@ -52,19 +52,25 @@ npx @lzwme/git-helper -h
 ```bash
 githelper --help
 gh commit --help
-gh run --helper
+gh run --help
 ```
 
 **提示：**
 
 `githelper` 有一个短的别名 `gh`，类似的：
 
-- `githelper commit` 命令也有短别名 `gh cm`、`gh c`
-- More...
+- `githelper commit` 命令有短别名 `gh cm`、`gh c`
+- `gh run` 命令有短别名： `gh r`
 
-示例：
+`gh commit` 示例：
 
 ```bash
+# git add & git commit & git pull --rebase
+gh c -m "chore: update deps"
+
+# git add & git commit --amend
+gh c -m "chore: update deps" --amend
+
 # git add & git commit & git pull --rebase & git push
 gh c -m "chore: update deps" -p
 
@@ -73,12 +79,19 @@ gh c -m "chore: update deps" -p -n
 
 # git add & # git commit --no-veify & git push
 gh c -m "chore: update deps" -p -n -N
+```
 
-# git add & git commit --amend
-gh c --amend -m "chore: update deps"
+`gh run` 示例：
+
+```bash
+# help
+gh r -h
 
 # git update
 gh r -u
+
+# run custom conmand group of abc
+gh r -c abc
 ```
 
 ## 配置文件

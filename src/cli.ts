@@ -53,6 +53,7 @@ program
 program
   .command('run')
   .alias('r')
+  .allowUnknownOption(true)
   .description(color.yellow(` 执行一组或多组（内置的或在配置文件中定义的）预定义命令`))
   .option(`-l, --list`, `查看可执行的命令组`)
   .option(`-u, --update`, `更新：${color.cyan('stash & pull --rebase & stash')}`)
@@ -93,9 +94,14 @@ program
       return;
     }
 
+    const unknownArgs = program.parseOptions(process.argv.slice(2)).unknown;
     for (const [groupName, item] of Object.entries(cmds)) {
       console.log(`> Run For Group: ${color.cyan(item.desc || groupName)}`);
-      for (const cmd of item.list) {
+      let list = item.list;
+      if (typeof list === 'function') list = list(unknownArgs);
+      for (let cmd of list) {
+        if (typeof cmd === 'function') cmd = cmd(unknownArgs);
+        if (!cmd) continue;
         console.log(` - [cmd]: ${color.greenBright(cmd)}`);
         execSync(cmd, stdio, config.baseDir);
       }

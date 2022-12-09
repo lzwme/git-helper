@@ -41,7 +41,7 @@ export interface IConfig {
       string,
       {
         desc?: string;
-        list: string[];
+        list: (string | ((unknownArgs: string[]) => string))[] | ((unknownArgs: string[]) => string[]);
       }
     >;
   };
