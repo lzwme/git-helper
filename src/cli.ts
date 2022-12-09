@@ -109,6 +109,22 @@ program
   });
 
 program
+  .command('log')
+  .alias('l')
+  .allowUnknownOption(true)
+  .description(color.yellow(` git log 输出简化`))
+  .option(`-n, --num <num>`, `日志数量`, '5')
+  .option(`-f, --format <tags...>`, `git log --format 的参数`, ['h', 'cn', 'cr', 's'])
+  .option(`--sep <sep>`, `指定 format 参数之间的分隔符。默认为空格`)
+  .action((opts: { num?: number; sep?: string; format?: string[] }) => {
+    if (typeof opts.sep !== 'string') opts.sep = '';
+    opts.sep = opts.sep.replace(/([$])/g, '\\$1');
+
+    const cmd = `git log -${+opts.num || 5} --format="%${opts.format.join(`${opts.sep || ' '}%`)}"`;
+    execSync(cmd, 'inherit', config.baseDir);
+  });
+
+program
   .command('util')
   .aliases(['u', 'utils'])
   .description(color.yellow(' 提供常用的 git 快捷工具类功能'))
