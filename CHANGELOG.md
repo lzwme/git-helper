@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/lzwme/git-helper/compare/v1.4.2...v1.5.0) (2022-12-10)
+
+
+### Features
+
+* 新增 gh log 命令 ([965da37](https://github.com/lzwme/git-helper/commit/965da37110b472c6a19dce7f9b7c910753a93fc0))
+
+
+### Bug Fixes
+
+* fix for git stash pop ([19dd12c](https://github.com/lzwme/git-helper/commit/19dd12cdf0427b55af4c0b54e26c7033849a2752))
+
 ### [1.4.2](https://github.com/lzwme/git-helper/compare/v1.4.0...v1.4.2) (2022-12-07)
 
 ### [1.4.1](https://github.com/lzwme/git-helper/compare/v1.4.0...v1.4.1) (2022-06-07)
