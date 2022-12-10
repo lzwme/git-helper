@@ -1,28 +1,26 @@
-import test from 'ava';
 import * as gitUtils from './git-utils';
 
-test('gitUtils.getGitLogList', t => {
+test('gitUtils.getGitLogList', () => {
   const res = gitUtils.getGitLogList(1);
-  t.is(res.length, 1);
-  t.is(res[0].s.length > 0, true);
-
-  t.is(gitUtils.getGitLogList().length, 1);
-  t.is(gitUtils.getGitLogList(3).length, 3);
+  expect(res.length).toBe(1);
+  expect(res[0].s.length > 0).toBeTruthy();
+  expect(gitUtils.getGitLogList().length).toBe(1);
+  expect(gitUtils.getGitLogList(3).length).toBe(3);
 });
 
-test('gitUtils.getHeadCommitId', t => {
-  t.true(typeof gitUtils.getHeadCommitId() === 'string');
+test('gitUtils.getHeadCommitId', () => {
+  expect(typeof gitUtils.getHeadCommitId() === 'string').toBeTruthy();
 });
 
-test('gitUtils.getHeadBranch', t => {
-  t.true(typeof gitUtils.getHeadBranch() === 'string');
+test('gitUtils.getHeadBranch', () => {
+  expect(typeof gitUtils.getHeadBranch() === 'string').toBeTruthy();
 });
 
-test('gitUtils.getHeadDiffFileList', t => {
-  t.true(Array.isArray(gitUtils.getHeadDiffFileList()));
-  t.true(gitUtils.getHeadDiffFileList(1).length > 0);
+test('gitUtils.getHeadDiffFileList', () => {
+  expect(Array.isArray(gitUtils.getHeadDiffFileList())).toBeTruthy();
+  expect(gitUtils.getHeadDiffFileList(1).length > 0).toBeTruthy();
 });
 
-test('gitUtils.getUserEmail', t => {
-  t.true(gitUtils.getUserEmail().length > 0);
+test('gitUtils.getUserEmail', () => {
+  expect(gitUtils.getUserEmail().length > 0).toBeTruthy();
 });

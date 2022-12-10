@@ -43,15 +43,12 @@
     "test": "run-s test:*",
     "test:lint": "eslint src --ext .ts",
     "test:prettier": "prettier \"src/**/*.ts\" --list-different",
-    "test:unit": "nyc --silent ava",
-    "watch": "run-s clean build:main && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
+    "test:unit": "pnpm jest",
+    "watch": "run-s clean && run-p \"watch:build\" \"watch:test\"",
     "watch:build": "npm run build:esm -- -w",
-    "watch:test": "nyc --silent ava --watch",
-    "cov": "run-s build test:unit cov:html cov:lcov",
-    "cov:html": "nyc report --reporter=html",
-    "cov:lcov": "nyc report --reporter=lcov",
-    "cov:summary": "nyc report --reporter=text-summary",
-    "cov:check": "nyc report && nyc check-coverage --lines 100 --functions 100 --branches 100",
+    "watch:test": "pnpm jest --watch",
+    "cov": "run-s build test:unit cov:html",
+    "cov:html": "pnpm jest --coverage",
     "doc": "npm run doc:html",
     "doc:html": "typedoc src/ --exclude **/*.spec.ts --out docs",
     "version": "standard-version",
@@ -60,48 +57,28 @@
     "clean": "node scripts/rmdir.js ./esm ./docs"
   },
   "devDependencies": {
-    "@ava/typescript": "^3.0.1",
-    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@jest/types": "^29.3.1",
     "@lzwme/fed-lint-helper": "^2.1.4",
     "@types/eslint": "^8.4.10",
-    "@types/node": "^18.11.11",
-    "@typescript-eslint/eslint-plugin": "^5.45.1",
-    "@typescript-eslint/parser": "^5.45.1",
-    "ava": "^5.1.0",
+    "@types/jest": "^29.2.4",
+    "@types/node": "^18.11.12",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
+    "@typescript-eslint/parser": "^5.46.0",
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-ava": "^13.2.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.2",
+    "jest": "^29.3.1",
     "npm-run-all": "^4.1.5",
-    "nyc": "^15.1.0",
-    "prettier": "^2.8.0",
+    "prettier": "^2.8.1",
     "standard-version": "^9.5.0",
+    "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
     "typedoc": "^0.23.21",
-    "typescript": "^4.9.3"
+    "typescript": "^4.9.4"
   },
   "dependencies": {
     "commander": "^9.4.1",
     "console-log-colors": "^0.3.3"
-  },
-  "ava": {
-    "failFast": true,
-    "timeout": "60s",
-    "require": [
-      "ts-node/register"
-    ],
-    "extensions": [
-      "ts"
-    ],
-    "files": [
-      "src/**/*.spec.ts"
-    ]
-  },
-  "nyc": {
-    "extends": "@istanbuljs/nyc-config-typescript",
-    "exclude": [
-      "**/*.spec.js"
-    ]
   }
 }
