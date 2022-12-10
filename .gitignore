@@ -13,4 +13,4 @@ node_modules
 /esm
 /cjs
 .nyc_output
-.git-helper.config.js
+git-helper.config.js

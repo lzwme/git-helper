@@ -96,15 +96,15 @@ gh r -c abc
 
 ## 配置文件
 
-配置文件名称为 `.git-helper.config.js`， 默认在当前项目执行目录下，也可以通过命令行参数 `-c` 指定。示例：
+配置文件名称为 `git-helper.config.js`， 默认在当前项目执行目录下，也可以通过命令行参数 `-c` 指定。示例：
 
 ```ts
-// .git-helper.config.js
+// git-helper.config.js
 
 /**
  * @type {import('@lzwme/git-helper').IConfig}
  */
- module.exports = {
+ export default {
   debug: false,
   baseDir: process.cwd(),
   commit: {

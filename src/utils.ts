@@ -6,8 +6,8 @@
  * @Description:
  */
 import { execSync as cpExecSync, type StdioOptions } from 'node:child_process';
-import { config } from './config';
 import { color } from 'console-log-colors';
+import { config } from './config.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type PlanObject = Record<string, any>;

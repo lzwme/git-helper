@@ -1,23 +1,11 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "baseUrl": ".",
-        "outDir": "./dist/",
-        "module": "esnext",
-        "sourceMap": true,
-        "alwaysStrict": false,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-    },
-    "exclude": [
-        "dist/**",
-        "mock/**",
-        "release/**",
-        "**/*.min.js",
-        "**/node_modules/**"
-    ],
-    "include": [
-        "**/*.ts",
-        "**/*.tsx"
-    ]
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": true,
+    "alwaysStrict": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "exclude": ["esm/**", "cjs/**", "doc/**", "**/node_modules/**"],
+  "include": ["**/*.ts"]
 }

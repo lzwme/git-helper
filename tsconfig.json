@@ -5,15 +5,14 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "baseUrl": ".",
-    "rootDir": "src",
     "skipLibCheck": true,
-    "outDir": "cjs",
+    "outDir": "esm",
     "strict": true,
     "strictNullChecks": false,
     "sourceMap": false,
     "noImplicitThis": true,
     "noImplicitAny": false,
-    "module": "commonjs",
+    "module": "ESNext",
     "target": "ESNext",
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -28,5 +27,6 @@
     "lib": ["ESNext", "dom"],
     "typeRoots": ["./typings", "./node_modules/@types"]
   },
+  "exclude": ["esm", "cjs"],
   "compileOnSave": false
 }

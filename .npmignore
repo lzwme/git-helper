@@ -16,7 +16,7 @@ commitlint.config.js
 .eslintrc.json
 .eslintrc.js
 .grs.config.js
-.git-helper.config.js
+git-helper.config.js
 CHANGELOG.md
 
 # packageManager

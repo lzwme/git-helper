@@ -7,20 +7,16 @@
  */
 
 import { color as chalk } from 'console-log-colors';
-import { getConfig } from './config';
-import { execSync, assign, log } from './utils';
-import { getHeadCommitId } from './git-utils';
-
-/** 缓存的全局对象 */
-const config = getConfig(null, false);
+import { getConfig, IConfig } from './config.js';
+import { execSync, assign, log } from './utils.js';
+import { getHeadCommitId } from './git-utils.js';
 
 function getGitHead(remote = false) {
   try {
     const commitId = getHeadCommitId(remote);
-    if (config.debug) log(`${remote ? 'REMOTE' : 'LOCAL'} ID: ${commitId}`);
     return commitId;
   } catch (error) {
-    const e = error as any;
+    const e = error as { stderr?: string };
     log(e.stderr ? chalk.redBright(e.stderr) : e);
   }
 
@@ -31,7 +27,7 @@ function help() {
   console.log(`   githelper cm -m "fix: test commit (JGCPS-XXX)" <--push> <--amend> <--n> <--debug>`);
 }
 
-function checkcommitCfg() {
+function checkcommitCfg(config: IConfig) {
   const commitCfg = config.commit;
   let errmsg = '';
 
@@ -55,7 +51,9 @@ function checkcommitCfg() {
   return !errmsg;
 }
 
-export function gitCommit(cfg = config) {
+export async function gitCommit(cfg?: IConfig) {
+  const config = await getConfig(null, false);
+
   if (cfg && cfg !== config) assign(config, cfg);
 
   const commitCfg = config.commit;
@@ -63,7 +61,7 @@ export function gitCommit(cfg = config) {
   if (config.debug) {
     log(chalk.cyanBright('开始执行 git commit 相关动作'));
   }
-  if (!checkcommitCfg()) return;
+  if (!checkcommitCfg(config)) return;
 
   /** commit 提交命令 */
   let commit = `git commit -m "${commitCfg.message}"`;
@@ -95,4 +93,3 @@ export function gitCommit(cfg = config) {
     }
   }
 }
-

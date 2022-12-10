@@ -9,7 +9,7 @@
 import { color } from 'console-log-colors';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { assign } from './utils';
+import { assign } from './utils.js';
 
 export interface IConfig {
   /** 用户自定义文件的路径 */
@@ -48,7 +48,7 @@ export interface IConfig {
 }
 
 export const config: IConfig = {
-  configPath: '.git-helper.config.js',
+  configPath: 'git-helper.config.js',
   baseDir: process.cwd(),
   debug: false,
   commit: {},
@@ -65,16 +65,15 @@ export const config: IConfig = {
 /**
  * 获取配置信息
  */
-export function getConfig(options?: IConfig, useCache = true) {
+export async function getConfig(options?: IConfig, useCache = true) {
   if (useCache) return config;
 
   if (options && options.configPath) config.configPath = options.configPath;
 
   const configPath = resolve(config.configPath);
   if (existsSync(configPath)) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const cfg: IConfig = require(configPath);
-    assign(config, cfg);
+    const cfg: { default: IConfig } = await import(configPath);
+    assign(config, cfg.default || cfg);
   } else if (config.debug) {
     console.log(color.yellowBright(`配置文件不存在：${configPath}`));
   }

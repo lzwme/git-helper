@@ -6,10 +6,9 @@
  * @Description: gh u 相关的命令。主要为常用的快捷工具方法
  */
 
-import path from 'path';
-import fs from 'fs';
-import { getConfig } from './config';
-import { execSync } from './utils';
+import path from 'node:path';
+import fs from 'node:fs';
+import { execSync } from './utils.js';
 
 /** getGitLog 返回项的格式 */
 interface GitLogItem {
@@ -46,13 +45,12 @@ interface GitLogItem {
 }
 
 /** 获取当前的本地分支名 */
-export function getHeadBranch() {
+export function getHeadBranch(baseDir = process.cwd()) {
   // 支持在 Jenkins CI 中从环境变量直接获取
   let branch = process.env.CI_COMMIT_REF_NAME;
 
   if (!branch) {
-    const config = getConfig(null, true);
-    const headPath = path.resolve(config.baseDir, './.git/HEAD');
+    const headPath = path.resolve(baseDir, './.git/HEAD');
 
     if (fs.existsSync(headPath)) {
       const head = fs.readFileSync(headPath, { encoding: 'utf-8' });

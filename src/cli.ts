@@ -1,30 +1,32 @@
 #!/usr/bin/env node
 
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { type StdioOptions } from 'node:child_process';
 import { program } from 'commander';
 import { color } from 'console-log-colors';
-import { getConfig, gitCommit, assign, getHeadBranch, getHeadCommitId, getUserEmail, getHeadDiffFileList, execSync } from './index';
+import { getConfig, type IConfig } from './config.js';
+import { gitCommit, assign, getHeadBranch, getHeadCommitId, getUserEmail, getHeadDiffFileList, execSync } from './index.js';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const pkg = require('../package.json');
+const flhSrcDir = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(readFileSync(resolve(flhSrcDir, '../package.json'), 'utf8'));
 
 const startTime = Date.now();
-let config = getConfig(undefined, false);
-const initConfig = cfg => {
+const initConfig = async (cfg?: IConfig) => {
   const options = program.opts();
-  assign(options, cfg);
-  config = getConfig(options, false);
+  if (cfg) assign(options, cfg);
+  const config = await getConfig(options, false);
 
   if (config.debug) console.log(color.cyanBright('CONFIG:'), config);
+  return config;
 };
 
 program
   .aliases(['gh'])
   .version(pkg.version, '-v, --version')
   .description(color.yellow(pkg.description) + ` [version@${color.cyanBright(pkg.version)}]`)
-  .option('-c, --config-path <filepath>', `配置文件 ${color.yellow(config.configPath)} 的路径`)
+  .option('-c, --config-path <filepath>', `配置文件 ${color.yellow('git-helper.config.js')} 的路径`)
   .option('-s, --silent', '开启静默模式，只打印必要的信息')
   .option('--debug', `开启调试模式。`, false);
 
@@ -40,13 +42,12 @@ program
   .option('--no-push', '是否不执行 git push')
   .option('-P, --pull', '是否执行 git pull --rebase')
   .option('-N, --no-pull', '是否不执行 git pull --rebase')
-  .action(opts => {
+  .action(async opts => {
     if (opts.messageReg) opts.messageReg = new RegExp(opts.messageReg);
 
-    initConfig({ commit: opts });
+    const config = await initConfig({ commit: opts });
     if (config.debug) console.log(opts);
-
-    gitCommit();
+    await gitCommit();
     logEnd();
   });
 
@@ -58,11 +59,11 @@ program
   .option(`-l, --list`, `查看可执行的命令组`)
   .option(`-u, --update`, `更新：${color.cyan('stash & pull --rebase & stash')}`)
   .option(`-g, --group <groupName...>`, `指定预定义的命令组名。可指定多个，按顺序执行命令组`)
-  .action((opts: { list?: boolean; update?: boolean; cmds?: string[] }) => {
-    const cmds: typeof config['run']['cmds'] = {};
-    const programOpts = program.opts();
-    const stdio: StdioOptions = programOpts.silent ? 'pipe' : 'inherit';
-    if (programOpts.debug) console.log(opts, programOpts);
+  .action(async (opts: { list?: boolean; update?: boolean; cmds?: string[] }) => {
+    const config = await initConfig();
+    const cmds: IConfig['run']['cmds'] = {};
+    const stdio: StdioOptions = config.silent ? 'pipe' : 'inherit';
+    if (config.debug) console.log(opts);
 
     if (opts.list) {
       const list = Object.keys(config.run.cmds).concat(['update']);
@@ -73,7 +74,7 @@ program
     if (opts.update || opts.cmds?.includes('update')) {
       const label = `gh_${Date.now()}`;
       const changed = getHeadDiffFileList(0, config.baseDir);
-      if (programOpts.debug) console.log('changed', changed);
+      if (config.debug) console.log('changed', changed);
       config.run.cmds.update.list = [
         changed.length > 0 ? `git stash save ${label}` : '',
         `git pull -r -n`,
@@ -96,13 +97,13 @@ program
 
     const unknownArgs = program.parseOptions(process.argv.slice(2)).unknown;
     for (const [groupName, item] of Object.entries(cmds)) {
-      console.log(`> Run For Group: ${color.cyan(item.desc || groupName)}`);
+      console.log(color.gray(`# Run:`), color.cyanBright(item.desc || groupName));
       let list = item.list;
       if (typeof list === 'function') list = list(unknownArgs);
       for (let cmd of list) {
         if (typeof cmd === 'function') cmd = cmd(unknownArgs);
         if (!cmd) continue;
-        console.log(` - [cmd]: ${color.greenBright(cmd)}`);
+        console.log(color.gray(` > [cmd]:`), color.greenBright(cmd));
         execSync(cmd, stdio, config.baseDir);
       }
     }
@@ -116,12 +117,13 @@ program
   .option(`-n, --num <num>`, `日志数量`, '5')
   .option(`-f, --format <tags...>`, `git log --format 的参数`, ['h', 'cn', 'cr', 's'])
   .option(`--sep <sep>`, `指定 format 参数之间的分隔符。默认为空格`)
-  .action((opts: { num?: number; sep?: string; format?: string[] }) => {
+  .option(`--cwd <cwd>`, `指定工作目录。默认为当前目录`)
+  .action((opts: { num?: number; sep?: string; format?: string[]; cwd?: string }) => {
     if (typeof opts.sep !== 'string') opts.sep = '';
     opts.sep = opts.sep.replace(/([$])/g, '\\$1');
 
     const cmd = `git log -${+opts.num || 5} --format="%${opts.format.join(`${opts.sep || ' '}%`)}"`;
-    execSync(cmd, 'inherit', config.baseDir);
+    execSync(cmd, 'inherit', opts.cwd || process.cwd());
   });
 
 program
@@ -133,7 +135,8 @@ program
   .option('-u, --upstream-id', '获取远端 upstream 的 commitId')
   .option('-e, --user-email', 'get user email')
   .action(opts => {
-    // initConfig({ utils: opts });
+    const config = program.opts();
+    // const config = await initConfig();
     if (config.debug) console.log(opts);
 
     if (opts.headBranch) console.log(color.yellowBright('Head Branch:'), getHeadBranch());

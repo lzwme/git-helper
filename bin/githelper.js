@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
-require('../cjs/cli');
+// require('../cjs/cli');
+import('../esm/cli.js');
