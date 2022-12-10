@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import { execSync } from './utils.js';
 
 /** getGitLog 返回项的格式 */
-interface GitLogItem {
+export interface GitLogItem {
   /** 提交对象（commit）的完整哈希字串 */
   H?: string;
   /** 提交对象的简短哈希字串 */

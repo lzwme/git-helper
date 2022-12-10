@@ -1,15 +1,16 @@
-[![Code Climate](https://lzw.me/images/logo.png)](https://lzw.me)
 [![@lzwme/git-helper](https://nodei.co/npm/@lzwme/git-helper.png)][npm-url]
 
 # @lzwme/git-helper
 
 [![NPM version][npm-badge]][npm-url]
 [![node version][node-badge]][node-url]
+![license](https://img.shields.io/github/license/lzwme/git-helper)
+
+[![build status](https://github.com/lzwme/git-helper/actions/workflows/node-ci.yml/badge.svg)](https://github.com/lzwme/git-helper/actions/workflows/node-ci.yml)
 [![npm download][download-badge]][download-url]
 [![GitHub issues][issues-badge]][issues-url]
 [![GitHub forks][forks-badge]][forks-url]
 [![GitHub stars][stars-badge]][stars-url]
-[![minzipped size][bundlephobia-badge]][bundlephobia-url]
 
 一个基于 `Node.js` 的简单的 `git commit` 等操作的辅助性工具。
 
