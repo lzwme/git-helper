@@ -79,7 +79,7 @@ export async function getConfig(options?: IConfig, useCache = true) {
   }
 
   // 直接入参的优先级最高
-  if (options) assign(config, options);
+  if (options && options !== config) assign(config, options);
 
   // 默认参数设置
   if (null == config.commit.pull) config.commit.pull = true;

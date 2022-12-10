@@ -47,7 +47,7 @@ program
 
     const config = await initConfig({ commit: opts });
     if (config.debug) console.log(opts);
-    await gitCommit();
+    await gitCommit(config);
     logEnd();
   });
 

@@ -8,7 +8,7 @@
 
 import { color as chalk } from 'console-log-colors';
 import { getConfig, IConfig } from './config.js';
-import { execSync, assign, log } from './utils.js';
+import { execSync, log } from './utils.js';
 import { getHeadCommitId } from './git-utils.js';
 
 function getGitHead(remote = false) {
@@ -52,10 +52,7 @@ function checkcommitCfg(config: IConfig) {
 }
 
 export async function gitCommit(cfg?: IConfig) {
-  const config = await getConfig(null, false);
-
-  if (cfg && cfg !== config) assign(config, cfg);
-
+  const config = await getConfig(cfg);
   const commitCfg = config.commit;
 
   if (config.debug) {
