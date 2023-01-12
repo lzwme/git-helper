@@ -115,7 +115,7 @@ program
   .allowUnknownOption(true)
   .description(color.yellow(` git log 输出简化`))
   .option(`-n, --num <num>`, `日志数量`, '5')
-  .option(`-f, --format <tags...>`, `git log --format 的参数`, ['h', 'cn', 'cr', 's'])
+  .option(`-f, --format <tags...>`, `git log --format 的参数`, ['h', 'an', 'cr', 's'])
   .option(`--sep <sep>`, `指定 format 参数之间的分隔符。默认为空格`)
   .option(`--cwd <cwd>`, `指定工作目录。默认为当前目录`)
   .action((opts: { num?: number; sep?: string; format?: string[]; cwd?: string }) => {
