@@ -28,6 +28,7 @@ program
   .description(color.yellow(pkg.description) + ` [version@${color.cyanBright(pkg.version)}]`)
   .option('-c, --config-path <filepath>', `配置文件 ${color.yellow('git-helper.config.js')} 的路径`)
   .option('-s, --silent', '开启静默模式，只打印必要的信息')
+  .option('-f, --force', '是否强制执行。如 `git push --force` 等')
   .option('--debug', `开启调试模式。`, false);
 
 program

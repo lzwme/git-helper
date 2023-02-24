@@ -2,7 +2,7 @@
  * @Author: lzw
  * @Date: 2021-04-22 14:51:05
  * @LastEditors: lzw
- * @LastEditTime: 2021-10-08 17:36:39
+ * @LastEditTime: 2023-02-24 18:11:08
  * @Description: git commit 提交辅助工具
  */
 
@@ -39,7 +39,7 @@ function checkcommitCfg(config: IConfig) {
     errmsg = `提交注释内容格式校验失败，应匹配规则：${commitCfg.messageReg}`;
   }
 
-  if (commitCfg.amend && getGitHead(false) === getGitHead(true)) {
+  if (!config.force && commitCfg.amend && getGitHead(false) === getGitHead(true)) {
     errmsg = '最近一次提交已在远端，不允许 amend 方式提交';
   }
 
@@ -76,7 +76,7 @@ export async function gitCommit(cfg?: IConfig) {
     'git add --all',
     commit,
     commitCfg.pull ? `git pull --rebase` + (config.debug ? ' -v' : '') : '',
-    commitCfg.push ? `git push` + (config.debug ? ' -v --progress' : '') : '',
+    commitCfg.push ? `git push` + (config.debug ? ' -v --progress' : '') + (config.force ? ' -f' : '') : '',
   ].filter(Boolean);
 
   for (const cmd of cmds) {

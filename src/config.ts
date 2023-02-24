@@ -20,6 +20,7 @@ export interface IConfig {
   debug?: boolean;
   /** 开启静默模式，只打印必要的信息 */
   silent?: boolean;
+  force?: boolean;
   /** cm 命令相关的配置 */
   commit?: {
     /** commit 后是否执行 pull <rebase> */
