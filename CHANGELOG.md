@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/lzwme/git-helper/compare/v1.5.0...v1.5.1) (2023-03-01)
+
+
+### Bug Fixes
+
+* cli 参数优先级应高于配置文件 ([4cfb763](https://github.com/lzwme/git-helper/commit/4cfb763b06dd515e43557d55f51d0fe0a7333ed8))
+
 ## [1.5.0](https://github.com/lzwme/git-helper/compare/v1.4.2...v1.5.0) (2022-12-10)
 
 
