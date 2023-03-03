@@ -76,6 +76,7 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
+    "@lzwme/fe-utils": "^1.4.0",
     "commander": "^10.0.0",
     "console-log-colors": "^0.4.0"
   }

@@ -4,10 +4,11 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type StdioOptions } from 'node:child_process';
-import { program } from 'commander';
+import { program, Option } from 'commander';
 import { color } from 'console-log-colors';
 import { getConfig, type IConfig } from './config.js';
 import { gitCommit, assign, getHeadBranch, getHeadCommitId, getUserEmail, getHeadDiffFileList, execSync } from './index.js';
+import { githubHelper, type GithubHelperOptions } from './github.js';
 
 const flhSrcDir = dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse(readFileSync(resolve(flhSrcDir, '../package.json'), 'utf8'));
@@ -50,6 +51,21 @@ program
     if (config.debug) console.log(opts);
     await gitCommit(config);
     logEnd();
+  });
+
+program
+  .command('github <url>')
+  .alias('g')
+  .allowUnknownOption(true)
+  .description(color.yellow(` Github 辅助工具，通过代理方式加速 clone 或下载 raw、release 等文件`))
+  .addOption(new Option('-p, --proxy <type>', `clone、pull 时使用的代理类型`).choices(['ghproxy', 'fastgit', 'none']).default('ghproxy'))
+  .option(`-C, --clone`, `加速 git clone`)
+  .option(`-A, --clone-args <args>`, `git clone 的其他参数。如 "--depth=1"`)
+  .option(`-D, --dl`, `加速 github Releases 或 raw 文件下载`)
+  .option(`-F, --filepath`, `指定输出文件或仓库目录的路径`)
+  .action((url: string, opts: GithubHelperOptions) => {
+    opts.url = url;
+    githubHelper(opts);
   });
 
 program
