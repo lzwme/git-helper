@@ -35,7 +35,7 @@ program
   .aliases(['gh'])
   .version(pkg.version, '-v, --version')
   .description(color.yellow(pkg.description) + ` [version@${color.cyanBright(pkg.version)}]`)
-  .option('-c, --config-path <filepath>', `配置文件 ${color.yellow('git-helper.config.js')} 的路径`)
+  .option('-c, --config-path <filepath>', `配置文件 ${color.yellow('git-helper.config.<js|cjs|mjs>')} 的路径`)
   .option('-s, --silent', '开启静默模式，只打印必要的信息')
   .option('-f, --force', '是否强制执行。如 `git push --force` 等')
   .option('--debug', `开启调试模式。`, false);
@@ -77,23 +77,27 @@ program
   });
 
 program
-  .command('run')
+  .command('run [groupName]')
   .alias('r')
   .allowUnknownOption(true)
   .description(color.yellow(` 执行一组或多组（内置的或在配置文件中定义的）预定义命令`))
   .option(`-l, --list`, `查看可执行的命令组`)
   .option(`-u, --update`, `更新：${color.cyan('stash & pull --rebase & stash')}`)
   .option(`-g, --cmd-group <groupName...>`, `指定预定义的命令组名。可指定多个，按顺序执行命令组`)
-  .action(async (opts: { list?: boolean; update?: boolean; cmdGroup?: string[] }) => {
+  .action(async (groupName: string, opts: { list?: boolean; update?: boolean; cmdGroup?: string[] }) => {
     const config = await initConfig();
     const cmds: IConfig['run']['cmds'] = {};
     const stdio: StdioOptions = config.silent ? 'pipe' : 'inherit';
     if (config.debug) console.log(opts);
 
     if (opts.list) {
-      const list = Object.keys(config.run.cmds);
+      const list = Object.entries(config.run.cmds).map(d => `${color.greenBright(d[0])}  ${color.cyan(d[1].desc || '')}`);
       console.log(`可用的命令组：${color.cyanBright(`\n - ${list.join('\n - ')}`)}`);
       return;
+    }
+
+    if (groupName) {
+      opts.cmdGroup = opts.cmdGroup ? [...opts.cmdGroup, groupName] : [groupName];
     }
 
     if (opts.update || opts.cmdGroup?.includes('update')) {

@@ -2,7 +2,7 @@
  * @Author: lzw
  * @Date: 2021-04-22 20:14:35
  * @LastEditors: lzw
- * @LastEditTime: 2022-11-02 13:56:11
+ * @LastEditTime: 2023-03-09 11:28:17
  * @Description:
  */
 
@@ -10,6 +10,7 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { color } from 'console-log-colors';
 import { assign } from '@lzwme/fe-utils';
+import { pathToFileURL } from 'url';
 
 export interface IConfig {
   /** 用户自定义文件的路径 */
@@ -51,7 +52,6 @@ export interface IConfig {
 }
 
 export const config: IConfig = {
-  configPath: 'git-helper.config.js',
   baseDir: process.cwd(),
   debug: false,
   commit: {},
@@ -65,6 +65,21 @@ export const config: IConfig = {
   },
 };
 
+async function loadConfigFile(configPath?: string, debug?: boolean) {
+  if (configPath) {
+    configPath = resolve(config.baseDir, configPath);
+
+    if (existsSync(configPath)) {
+      const cfg: { default: IConfig } = await import(pathToFileURL(configPath).href);
+      assign(config, cfg.default || cfg);
+    } else if (debug) {
+      console.log(color.yellowBright(`配置文件不存在：${configPath}`));
+    }
+  } else {
+    for (const ext of ['js', 'cjs', 'mjs']) await loadConfigFile(`git-helper.config.${ext}`, false);
+  }
+}
+
 /**
  * 获取配置信息
  */
@@ -73,13 +88,7 @@ export async function getConfig(options?: IConfig, useCache = true) {
 
   if (options && options.configPath) config.configPath = options.configPath;
 
-  const configPath = resolve(config.configPath);
-  if (existsSync(configPath)) {
-    const cfg: { default: IConfig } = await import(configPath);
-    assign(config, cfg.default || cfg);
-  } else if (config.debug) {
-    console.log(color.yellowBright(`配置文件不存在：${configPath}`));
-  }
+  await loadConfigFile(config.configPath, true);
 
   // 直接入参的优先级最高
   if (options && options !== config) assign(config, options);

@@ -1,7 +1,7 @@
 /**
  * @type {import('./').IConfig}
  */
-export default {
+module.exports = {
   // debug: false,
   // baseDir: process.cwd(),
   commit: {
