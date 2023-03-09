@@ -75,20 +75,20 @@ program
   .description(color.yellow(` 执行一组或多组（内置的或在配置文件中定义的）预定义命令`))
   .option(`-l, --list`, `查看可执行的命令组`)
   .option(`-u, --update`, `更新：${color.cyan('stash & pull --rebase & stash')}`)
-  .option(`-g, --group <groupName...>`, `指定预定义的命令组名。可指定多个，按顺序执行命令组`)
-  .action(async (opts: { list?: boolean; update?: boolean; cmds?: string[] }) => {
+  .option(`-g, --cmd-group <groupName...>`, `指定预定义的命令组名。可指定多个，按顺序执行命令组`)
+  .action(async (opts: { list?: boolean; update?: boolean; cmdGroup?: string[] }) => {
     const config = await initConfig();
     const cmds: IConfig['run']['cmds'] = {};
     const stdio: StdioOptions = config.silent ? 'pipe' : 'inherit';
     if (config.debug) console.log(opts);
 
     if (opts.list) {
-      const list = Object.keys(config.run.cmds).concat(['update']);
+      const list = Object.keys(config.run.cmds);
       console.log(`可用的命令组：${color.cyanBright(`\n - ${list.join('\n - ')}`)}`);
       return;
     }
 
-    if (opts.update || opts.cmds?.includes('update')) {
+    if (opts.update || opts.cmdGroup?.includes('update')) {
       const label = `gh_${Date.now()}`;
       const changed = getHeadDiffFileList(0, config.baseDir);
       if (config.debug) console.log('changed', changed);
@@ -100,8 +100,8 @@ program
       cmds.update = config.run.cmds.update;
     }
 
-    if (Array.isArray(opts.cmds)) {
-      opts.cmds.forEach(groupName => {
+    if (Array.isArray(opts.cmdGroup)) {
+      opts.cmdGroup.forEach(groupName => {
         if (config.run.cmds[groupName]) cmds[groupName] = config.run.cmds[groupName];
         else console.warn(color.yellow(`未知的命令组：`), color.yellowBright(groupName));
       });
