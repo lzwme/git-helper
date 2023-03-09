@@ -20,23 +20,6 @@ export function execSync(cmd, stdio?: StdioOptions, cwd?: string) {
   return res == null ? '' : res.toString().trim();
 }
 
-/** 简易的对象深复制 */
-export function assign(a, b) {
-  if (!a || !b) return a;
-  if (typeof b !== 'object' || b instanceof RegExp || Array.isArray(b)) return a;
-
-  for (const key in b) {
-    if (null == b[key] || typeof b[key] !== 'object' || b[key] instanceof RegExp || b[key] instanceof Array) {
-      a[key] = b[key];
-    } else {
-      if (!a[key]) a[key] = {};
-      assign(a[key], b[key]);
-    }
-  }
-
-  return a;
-}
-
 export function log(...args: unknown[]) {
   console.log(`[${color.cyanBright(new Date().toTimeString().slice(0, 8))}]`, ...args);
 }

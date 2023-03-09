@@ -1,17 +1,25 @@
 #!/usr/bin/env node
 
-import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type StdioOptions } from 'node:child_process';
 import { program, Option } from 'commander';
 import { color } from 'console-log-colors';
 import { getConfig, type IConfig } from './config.js';
-import { gitCommit, assign, getHeadBranch, getHeadCommitId, getUserEmail, getHeadDiffFileList, execSync } from './index.js';
+import {
+  readJsonFileSync,
+  assign,
+  type PackageJson,
+  getUserEmail,
+  getHeadDiffFileList,
+  getHeadBranch,
+  getHeadCommitId,
+} from '@lzwme/fe-utils';
+import { gitCommit, execSync } from './index.js';
 import { githubHelper, type GithubHelperOptions } from './github.js';
 
 const flhSrcDir = dirname(fileURLToPath(import.meta.url));
-const pkg = JSON.parse(readFileSync(resolve(flhSrcDir, '../package.json'), 'utf8'));
+const pkg = readJsonFileSync<PackageJson>(resolve(flhSrcDir, '../package.json'));
 
 const startTime = Date.now();
 const initConfig = async (cfg?: IConfig) => {
@@ -90,13 +98,8 @@ program
 
     if (opts.update || opts.cmdGroup?.includes('update')) {
       const label = `gh_${Date.now()}`;
-      const changed = getHeadDiffFileList(0, config.baseDir);
-      if (config.debug) console.log('changed', changed);
-      config.run.cmds.update.list = [
-        changed.length > 0 ? `git stash save ${label}` : '',
-        `git pull -r -n`,
-        changed.length > 0 ? `git stash pop` : '',
-      ].filter(Boolean);
+      config.run.cmds.update.list = (changed: string[]) =>
+        [changed.length > 0 ? `git stash save ${label}` : '', `git pull -r -n`, changed.length > 0 ? `git stash pop` : ''].filter(Boolean);
       cmds.update = config.run.cmds.update;
     }
 
@@ -112,13 +115,15 @@ program
       return;
     }
 
+    const changed = getHeadDiffFileList(0, config.baseDir);
+    if (config.debug) console.log('changed', changed);
     const unknownArgs = program.parseOptions(process.argv.slice(2)).unknown;
     for (const [groupName, item] of Object.entries(cmds)) {
       console.log(color.gray(`# Run:`), color.cyanBright(item.desc || groupName));
       let list = item.list;
-      if (typeof list === 'function') list = list(unknownArgs);
+      if (typeof list === 'function') list = list(changed, unknownArgs);
       for (let cmd of list) {
-        if (typeof cmd === 'function') cmd = cmd(unknownArgs);
+        if (typeof cmd === 'function') cmd = cmd(changed, unknownArgs);
         if (!cmd) continue;
         console.log(color.gray(` > [cmd]:`), color.greenBright(cmd));
         execSync(cmd, stdio, config.baseDir);

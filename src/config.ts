@@ -6,10 +6,10 @@
  * @Description:
  */
 
-import { color } from 'console-log-colors';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { assign } from './utils.js';
+import { color } from 'console-log-colors';
+import { assign } from '@lzwme/fe-utils';
 
 export interface IConfig {
   /** 用户自定义文件的路径 */
@@ -42,7 +42,9 @@ export interface IConfig {
       string,
       {
         desc?: string;
-        list: (string | ((unknownArgs: string[]) => string))[] | ((unknownArgs: string[]) => string[]);
+        list:
+          | (string | ((changed: string[], unknownArgs: string[]) => string))[]
+          | ((changed: string[], unknownArgs: string[]) => string[]);
       }
     >;
   };

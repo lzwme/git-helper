@@ -6,10 +6,10 @@
  * @Description: git commit 提交辅助工具
  */
 
-import { color as chalk } from 'console-log-colors';
+import { color } from 'console-log-colors';
+import { getHeadCommitId } from '@lzwme/fe-utils';
 import { getConfig, IConfig } from './config.js';
 import { execSync, log } from './utils.js';
-import { getHeadCommitId } from './git-utils.js';
 
 function getGitHead(remote = false) {
   try {
@@ -17,13 +17,13 @@ function getGitHead(remote = false) {
     return commitId;
   } catch (error) {
     const e = error as { stderr?: string };
-    log(e.stderr ? chalk.redBright(e.stderr) : e);
+    log(e.stderr ? color.redBright(e.stderr) : e);
   }
 
   return '';
 }
 function help() {
-  console.log(chalk.yellowBright(`\n USEAGE:`));
+  console.log(color.yellowBright(`\n USEAGE:`));
   console.log(`   githelper cm -m "fix: test commit (JGCPS-XXX)" <--push> <--amend> <--n> <--debug>`);
 }
 
@@ -44,7 +44,7 @@ function checkcommitCfg(config: IConfig) {
   }
 
   if (errmsg) {
-    log(chalk.redBright(errmsg));
+    log(color.redBright(errmsg));
     help();
   }
 
@@ -56,7 +56,7 @@ export async function gitCommit(cfg?: IConfig) {
   const commitCfg = config.commit;
 
   if (config.debug) {
-    log(chalk.cyanBright('开始执行 git commit 相关动作'));
+    log(color.cyanBright('开始执行 git commit 相关动作'));
   }
   if (!checkcommitCfg(config)) return;
 
@@ -81,7 +81,7 @@ export async function gitCommit(cfg?: IConfig) {
 
   for (const cmd of cmds) {
     try {
-      log(chalk.yellowBright('执行命令：'), chalk.cyanBright(cmd));
+      log(color.yellowBright('执行命令：'), color.cyanBright(cmd));
       execSync(cmd);
     } catch (error) {
       const e = error as Error;

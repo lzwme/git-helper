@@ -34,27 +34,4 @@ describe('git-utils', () => {
     execSyncFn.mockImplementationOnce(() => [gitLogLine, gitLogLine, gitLogLine].join('\n'));
     expect(gitUtils.getGitLogList(3).length).toBe(3);
   });
-
-  test('gitUtils.getHeadCommitId', () => {
-    execSyncFn.mockReturnValueOnce('aaaaaaaa');
-    expect(typeof gitUtils.getHeadCommitId() === 'string').toBeTruthy();
-  });
-
-  test('gitUtils.getHeadBranch', () => {
-    execSyncFn.mockReturnValueOnce('main');
-    expect(typeof gitUtils.getHeadBranch() === 'string').toBeTruthy();
-  });
-
-  test('gitUtils.getHeadDiffFileList', () => {
-    execSyncFn.mockReturnValueOnce('123.js\n123.ts');
-    expect(Array.isArray(gitUtils.getHeadDiffFileList())).toBeTruthy();
-
-    execSyncFn.mockReturnValueOnce('abc.ts');
-    expect(gitUtils.getHeadDiffFileList(1).length > 0).toBeTruthy();
-  });
-
-  test('gitUtils.getUserEmail', () => {
-    execSyncFn.mockReturnValueOnce('a@lzw.me');
-    expect(gitUtils.getUserEmail().length > 0).toBeTruthy();
-  });
 });

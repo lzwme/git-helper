@@ -2,12 +2,10 @@
  * @Author: lzw
  * @Date: 2021-04-23 10:44:32
  * @LastEditors: lzw
- * @LastEditTime: 2021-08-26 09:10:48
+ * @LastEditTime: 2023-03-09 11:04:48
  * @Description: gh u 相关的命令。主要为常用的快捷工具方法
  */
 
-import path from 'node:path';
-import fs from 'node:fs';
 import { execSync } from './utils.js';
 
 /** getGitLog 返回项的格式 */
@@ -44,43 +42,6 @@ export interface GitLogItem {
   s?: string;
 }
 
-/** 获取当前的本地分支名 */
-export function getHeadBranch(baseDir = process.cwd()) {
-  // 支持在 Jenkins CI 中从环境变量直接获取
-  let branch = process.env.CI_COMMIT_REF_NAME;
-
-  if (!branch) {
-    const headPath = path.resolve(baseDir, './.git/HEAD');
-
-    if (fs.existsSync(headPath)) {
-      const head = fs.readFileSync(headPath, { encoding: 'utf-8' });
-      branch = head.split('refs/heads/')[1];
-    }
-  }
-
-  if (!branch) {
-    // exec 速度比较慢
-    branch = execSync('git rev-parse --abbrev-ref HEAD', 'pipe');
-  }
-
-  return branch.trim();
-}
-
-/** 获取本地或远端最新的 commitId */
-export function getHeadCommitId(isRemote = false) {
-  const commitId = execSync(`git rev-parse ${isRemote ? '@{upstream}' : 'HEAD'}`, 'pipe');
-  return commitId;
-}
-
-/**
- * 获取指定 HEAD 的变更文件列表
- * @param headIndex HEAD 顺序，默认为 0，即最新的本地未提交变更
- */
-export function getHeadDiffFileList(headIndex = 0, cwd?: string) {
-  const stdout = execSync(`git diff HEAD~${headIndex} --name-only`, 'pipe', cwd).trim();
-  return stdout ? stdout.split('\n') : [];
-}
-
 /**
  * 获取指定数量的日志注释信息
  * @param num 指定获取日志的数量，
@@ -99,9 +60,4 @@ export function getGitLogList(num = 1, cwd?: string) {
   });
 
   return result;
-}
-
-/** 获取 git user eamil 地址 */
-export function getUserEmail() {
-  return execSync('git config --get user.email', 'pipe');
 }
