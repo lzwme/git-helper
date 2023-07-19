@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/lzwme/git-helper/compare/v1.5.1...v1.6.0) (2023-07-19)
+
+
+### Features
+
+* 新增 gh github 命令，支持以代理方式加速 github 仓库的 clone 与附件下载 ([4422670](https://github.com/lzwme/git-helper/commit/4422670b86653108c8742f0c872deeae876c9ead))
+
+
+### Bug Fixes
+
+* 修复 cmd group 命令组参数名错误的问题 ([4888816](https://github.com/lzwme/git-helper/commit/4888816871ce81049f96a9e3afc99dcefc026edb))
+
 ### [1.5.1](https://github.com/lzwme/git-helper/compare/v1.5.0...v1.5.1) (2023-03-01)
 
 
