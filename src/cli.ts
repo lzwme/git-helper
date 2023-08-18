@@ -14,9 +14,11 @@ import {
   getHeadDiffFileList,
   getHeadBranch,
   getHeadCommitId,
+  isGitRepo,
 } from '@lzwme/fe-utils';
-import { gitCommit, execSync } from './index.js';
+import { gitCommit, execSync, logger } from './index.js';
 import { githubHelper, type GithubHelperOptions } from './github.js';
+import { autoCommit } from './auto-run.js';
 
 const flhSrcDir = dirname(fileURLToPath(import.meta.url));
 const pkg = readJsonFileSync<PackageJson>(resolve(flhSrcDir, '../package.json'));
@@ -150,6 +152,23 @@ program
 
     const cmd = `git log -${+opts.num || 5} --format="%${opts.format.join(`${opts.sep || ' '}%`)}"`;
     execSync(cmd, 'inherit', opts.cwd || process.cwd());
+  });
+
+program
+  .command('auto-git')
+  .alias('a')
+  .description(color.yellow(` 定时的自动执行 git 代码提交`))
+  .option(`--cmd <cmd...>`, `自定义要执行的命令`)
+  .option(`--dir <dir>`, `指定要监控的目录。默认为当前目录`)
+  .option(`-m, --min-sync-interval <num>`, `最小同步时间间隔。单位为秒。默认为 30`, '30')
+  .action((opts: { dir?: string; cmd?: string[]; minSyncInterval?: number }) => {
+    if (isGitRepo(opts.dir)) {
+      logger.info('[auto-git]已启动');
+      autoCommit({
+        id: 'auto-git',
+        ...opts,
+      });
+    }
   });
 
 program

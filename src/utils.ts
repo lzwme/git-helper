@@ -7,6 +7,7 @@
  */
 import { execSync as cpExecSync, type StdioOptions } from 'node:child_process';
 import { color } from 'console-log-colors';
+import { getLogger } from '@lzwme/fe-utils';
 import { config } from './config.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,3 +24,5 @@ export function execSync(cmd, stdio?: StdioOptions, cwd?: string) {
 export function log(...args: unknown[]) {
   console.log(`[${color.cyanBright(new Date().toTimeString().slice(0, 8))}]`, ...args);
 }
+
+export const logger = getLogger('[GH]');
