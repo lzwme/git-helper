@@ -3,7 +3,7 @@ import { execSync, dateFormat, gitHasUnstagedChanges } from '@lzwme/fe-utils';
 import { cyan, greenBright } from 'console-log-colors';
 import { logger } from './utils.js';
 
-const cacheMap = new Map<string, { lastSync: number; total: 0 }>();
+const cacheMap = new Map<string, { lastSync: number; total: 0; running?: boolean }>();
 
 type AutoRunOption = {
   id: string;
@@ -24,6 +24,8 @@ export const autoRunCmds = (option: AutoRunOption) => {
   const now = dateFormat('yyyy/MM/dd hh:mm:ss');
   const cache = cacheMap.get(option.id) || { lastSync: 0, total: 0 };
 
+  if (cache.running) return;
+
   if (!option.dir) option.dir = process.cwd();
   if (typeof option.cmd === 'function') option.cmd = option.cmd(now);
   option.minSyncInterval = +option.minSyncInterval || 0;
@@ -32,6 +34,7 @@ export const autoRunCmds = (option: AutoRunOption) => {
 
   cache.lastSync = Date.now();
   cache.total++;
+  cache.running = true;
   cacheMap.set(option.id, cache);
 
   for (const cmd of option.cmd) {
@@ -41,10 +44,12 @@ export const autoRunCmds = (option: AutoRunOption) => {
     if (r.stderr) {
       logger.error(r.stderr);
       break;
-    } else {
-      logger.info(`第[${cyan(cache.total)}]次执行命令`, greenBright(option.cmd));
     }
   }
+
+  logger.info(`第[${cyan(cache.total)}]次执行命令`, greenBright(option.cmd.join(' && ')));
+  cache.running = false;
+  cacheMap.set(option.id, cache);
 };
 
 export function autoCommit(option: AutoRunOption) {
@@ -52,7 +57,7 @@ export function autoCommit(option: AutoRunOption) {
 
   setTimeout(() => {
     if (!option.cmd) {
-      option.cmd = (now: string) => [`git add .`, `git commit -m 'chore: autosave at ${now}'`, `git pull -r -n`, `git push`];
+      option.cmd = (now: string) => [`git add .`, `git commit -m "chore: autosave at ${now}"`, `git pull -r -n`, `git push`];
     }
 
     if (gitHasUnstagedChanges()) autoRunCmds(option);
