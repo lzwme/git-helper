@@ -16,6 +16,7 @@ type AutoRunOption = {
 };
 
 export const autoRunCmds = (option: AutoRunOption) => {
+  option = { ...option };
   if (!option.cmd) {
     logger.warn('cmd 命令列表不能为空！', option);
     return;
