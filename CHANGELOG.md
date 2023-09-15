@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/lzwme/git-helper/compare/v1.6.0...v1.7.0) (2023-09-15)
+
+
+### Features
+
+* 新增 gh auto-git 命令，支持定时的执行 git 提交 ([3454a41](https://github.com/lzwme/git-helper/commit/3454a41d2635e05111bf6281ba9d6191dbf98351))
+
+
+### Bug Fixes
+
+* **auto-git:** 修复 cmd 为 function 时二次执行会被替换为字符串的问题 ([fcab701](https://github.com/lzwme/git-helper/commit/fcab701d0545933e4d7422bde7983e1c057ab3fa))
+
 ## [1.6.0](https://github.com/lzwme/git-helper/compare/v1.5.1...v1.6.0) (2023-07-19)
 
 
