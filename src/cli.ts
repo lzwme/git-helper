@@ -46,7 +46,7 @@ program
   .command('commit')
   .aliases(['c', 'cm'])
   .description(color.yellow(' 执行 git 提交相关的动作，包括 add、commit、pull 及 push 等'))
-  .option('-m, --message [message]', 'git 提交注释内容')
+  .option('-m, --message <message>', 'git 提交注释内容')
   .option('-r, --messageReg', 'message 提交注释的验证规则，建议写在配置文件中')
   .option('-a, --amend', '是否修改上一次提交')
   .option('-n, --noVerify', '是否跳过 git hooks')

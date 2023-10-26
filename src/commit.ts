@@ -1,8 +1,8 @@
 /*
  * @Author: lzw
  * @Date: 2021-04-22 14:51:05
- * @LastEditors: lzw
- * @LastEditTime: 2023-02-24 18:11:08
+ * @LastEditors: renxia
+ * @LastEditTime: 2023-10-26 11:44:33
  * @Description: git commit 提交辅助工具
  */
 
@@ -30,8 +30,7 @@ function help() {
 function checkcommitCfg(config: IConfig) {
   const commitCfg = config.commit;
   let errmsg = '';
-
-  const message = String(commitCfg.message || '');
+  const message = typeof commitCfg.message === 'string' ? commitCfg.message : '';
 
   if (!commitCfg.amend && !message) errmsg = '缺少 message 提交注释';
 
