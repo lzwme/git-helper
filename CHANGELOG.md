@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/lzwme/git-helper/compare/v1.7.0...v1.7.1) (2024-02-23)
+
+
+### Bug Fixes
+
+* 更新 ghproxy 地址 ([ad98a8c](https://github.com/lzwme/git-helper/commit/ad98a8cd1e152199cd4a29c310a2b5558c1ad0c6))
+* 修复 -m 参数允许不指定值时 commit信息为 true 的问题 ([54c21af](https://github.com/lzwme/git-helper/commit/54c21af5e8f5bbdbd74d6d8c873a5856523874b5))
+
 ## [1.7.0](https://github.com/lzwme/git-helper/compare/v1.6.0...v1.7.0) (2023-09-15)
 
 
