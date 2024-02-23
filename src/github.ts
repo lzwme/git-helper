@@ -25,7 +25,7 @@ export async function githubHelper(options: GithubHelperOptions) {
     url = url.replace(/^(http(s)?|git):\/\/github\.com/, 'https://hub.fastgit.org').replace(/^git@github\.com:/, 'git@ssh.fastgit.org:');
   } else if (options.proxy === 'ghproxy') {
     if (type === 'clone' && url.includes('git@github')) url = url.replace('git@', '').replace(':', '/');
-    url = `https://ghproxy.com/${type === 'clone' ? url : encodeURIComponent(url)}`;
+    url = `https://mirror.ghproxy.com/${type === 'clone' ? url : encodeURIComponent(url)}`;
   }
 
   if (type === 'clone') {
