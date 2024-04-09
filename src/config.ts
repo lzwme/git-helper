@@ -1,8 +1,8 @@
 /*
  * @Author: lzw
  * @Date: 2021-04-22 20:14:35
- * @LastEditors: lzw
- * @LastEditTime: 2023-03-09 11:28:17
+ * @LastEditors: renxia
+ * @LastEditTime: 2024-04-09 09:30:58
  * @Description:
  */
 
@@ -30,6 +30,8 @@ export interface IConfig {
     push?: boolean;
     /** git commit --amend 模式，即覆盖前一条提交，不建议写在配置文件中 */
     amend?: boolean;
+    /** 提交时间 */
+    date?: string;
     /** 提交注释 */
     message?: string;
     /** 是否跳过 git hook */

@@ -2,7 +2,7 @@
  * @Author: lzw
  * @Date: 2021-04-22 14:51:05
  * @LastEditors: renxia
- * @LastEditTime: 2023-10-26 11:44:33
+ * @LastEditTime: 2024-04-09 09:33:09
  * @Description: git commit 提交辅助工具
  */
 
@@ -65,7 +65,10 @@ export async function gitCommit(cfg?: IConfig) {
   if (commitCfg.amend) {
     if (!commitCfg.message) commit = `git commit --amend --no-edit`;
     else commit += ' --amend';
+    if (!commitCfg.date) commitCfg.date = new Date().toISOString();
   }
+
+  if (commitCfg.date) commit += ` --date="${commitCfg.date}"`;
 
   if (commitCfg.noVerify) commit += ' -n';
 

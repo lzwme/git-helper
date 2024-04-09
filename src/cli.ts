@@ -49,6 +49,7 @@ program
   .option('-m, --message <message>', 'git 提交注释内容')
   .option('-r, --messageReg', 'message 提交注释的验证规则，建议写在配置文件中')
   .option('-a, --amend', '是否修改上一次提交')
+  .option('-d, --date <ISO Date>', '修改提交日期。当 --amend 参数存在时默认为当前时间')
   .option('-n, --noVerify', '是否跳过 git hooks')
   .option('-p, --push', '是否执行 git push')
   .option('--no-push', '是否不执行 git push')
