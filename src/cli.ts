@@ -76,7 +76,7 @@ program
   .option(`-F, --filepath`, `指定输出文件或仓库目录的路径`)
   .action((url: string, opts: GithubHelperOptions) => {
     opts.url = url;
-    githubHelper(opts);
+    githubHelper(opts).catch(e => console.error(e));
   });
 
 program
