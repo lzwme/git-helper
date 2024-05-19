@@ -26,7 +26,7 @@
     "git helper",
     "git commit"
   ],
-  "packageManager": "pnpm@8.6.0",
+  "packageManager": "pnpm@9.1.1",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.com"
@@ -39,9 +39,9 @@
     "build:esm": "tsc -p tsconfig.module.json",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
-    "fix:lint": "eslint src --ext .ts --fix",
+    "fix:lint": "eslint src/**/*.ts --fix",
     "test": "run-s test:*",
-    "test:lint": "eslint src --ext .ts",
+    "test:lint": "eslint src/**/*.ts",
     "test:prettier": "prettier \"src/**/*.ts\" --list-different",
     "test:unit": "npm run cov",
     "watch": "run-s clean && run-p \"watch:build\" \"watch:test\"",
@@ -55,15 +55,15 @@
     "clean": "node scripts/rmdir.js ./esm ./docs"
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
+    "@eslint/js": "^9.3.0",
     "@jest/types": "^29.6.3",
     "@lzwme/fed-lint-helper": "^2.6.0",
-    "@types/eslint": "^8.56.7",
+    "@types/eslint": "^8.56.10",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.7",
-    "@typescript-eslint/eslint-plugin": "^7.6.0",
-    "@typescript-eslint/parser": "^7.6.0",
-    "eslint": "^9.0.0",
+    "@types/node": "^20.12.12",
+    "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@typescript-eslint/parser": "^7.9.0",
+    "eslint": "^9.3.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "husky": "^9.0.11",
@@ -74,12 +74,12 @@
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typedoc": "^0.25.13",
-    "typescript": "^5.4.4",
-    "typescript-eslint": "^7.6.0"
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.9.0"
   },
   "dependencies": {
-    "@lzwme/fe-utils": "^1.7.2",
-    "commander": "^12.0.0",
-    "console-log-colors": "^0.4.0"
+    "@lzwme/fe-utils": "^1.7.3",
+    "commander": "^12.1.0",
+    "console-log-colors": "^0.5.0"
   }
 }
