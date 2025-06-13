@@ -145,14 +145,15 @@ program
   .allowUnknownOption(true)
   .description(color.yellow(` git log 输出简化`))
   .option(`-n, --num <num>`, `日志数量`, '5')
-  .option(`-f, --format <tags...>`, `git log --format 的参数`, ['h', 'an', 'cr', 's'])
+  .option(`-F, --format <tags...>`, `git log --format 的参数`, ['h', 'an', 'cr', 's'])
+  .option('--date <date-type>', '指定 git log --date 参数', 'iso-local')
   .option(`--sep <sep>`, `指定 format 参数之间的分隔符。默认为空格`)
   .option(`--cwd <cwd>`, `指定工作目录。默认为当前目录`)
-  .action((filepath: string | undefined, opts: { num?: number; sep?: string; format?: string[]; cwd?: string }) => {
+  .action((filepath: string | undefined, opts: { num?: number; sep?: string; format?: string[]; cwd?: string; date?: string }) => {
     if (typeof opts.sep !== 'string') opts.sep = '';
     opts.sep = opts.sep.replace(/([$])/g, '\\$1');
 
-    let cmd = `git log -${+opts.num || 5} --format="%${opts.format.join(`${opts.sep || ' '}%`)}"`;
+    let cmd = `git log -${+opts.num || 5} --date=${opts.date} --format="%${opts.format.join(`${opts.sep || ' '}%`)}"`;
     if (filepath) cmd += ` "${filepath}"`;
     execSync(cmd, 'inherit', opts.cwd || process.cwd());
   });
