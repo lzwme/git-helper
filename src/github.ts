@@ -1,5 +1,5 @@
-import { resolve, basename } from 'node:path';
-import { execSync, download, NLogger, color } from '@lzwme/fe-utils';
+import { basename, resolve } from 'node:path';
+import { color, download, execSync, NLogger } from '@lzwme/fe-utils';
 
 export interface GithubHelperOptions {
   clone?: boolean;

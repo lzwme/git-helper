@@ -1,24 +1,24 @@
 #!/usr/bin/env node
 
+import type { StdioOptions } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type StdioOptions } from 'node:child_process';
-import { program, Option } from 'commander';
-import { color } from 'console-log-colors';
-import { getConfig, type IConfig } from './config.js';
 import {
-  readJsonFileSync,
   assign,
-  type PackageJson,
-  getUserEmail,
-  getHeadDiffFileList,
   getHeadBranch,
   getHeadCommitId,
+  getHeadDiffFileList,
+  getUserEmail,
   isGitRepo,
+  type PackageJson,
+  readJsonFileSync,
 } from '@lzwme/fe-utils';
-import { gitCommit, execSync, logger } from './index.js';
-import { githubHelper, type GithubHelperOptions } from './github.js';
+import { Option, program } from 'commander';
+import { color } from 'console-log-colors';
 import { autoCommit } from './auto-run.js';
+import { getConfig, type IConfig } from './config.js';
+import { type GithubHelperOptions, githubHelper } from './github.js';
+import { execSync, gitCommit, logger } from './index.js';
 
 const flhSrcDir = dirname(fileURLToPath(import.meta.url));
 const pkg = readJsonFileSync<PackageJson>(resolve(flhSrcDir, '../package.json'));
@@ -36,7 +36,7 @@ const initConfig = async (cfg?: IConfig) => {
 program
   .aliases(['gh'])
   .version(pkg.version, '-v, --version')
-  .description(color.yellow(pkg.description) + ` [version@${color.cyanBright(pkg.version)}]`)
+  .description(`${color.yellow(pkg.description)} [version@${color.cyanBright(pkg.version)}]`)
   .option('-c, --config-path <filepath>', `配置文件 ${color.yellow('git-helper.config.<js|cjs|mjs>')} 的路径`)
   .option('-s, --silent', '开启静默模式，只打印必要的信息')
   .option('-f, --force', '是否强制执行。如 `git push --force` 等')
@@ -55,7 +55,7 @@ program
   .option('--no-push', '是否不执行 git push')
   .option('-P, --pull', '是否执行 git pull --rebase')
   .option('-N, --no-pull', '是否不执行 git pull --rebase')
-  .action(async opts => {
+  .action(async (opts) => {
     if (opts.messageReg) opts.messageReg = new RegExp(opts.messageReg);
 
     const config = await initConfig({ commit: opts });
@@ -76,7 +76,7 @@ program
   .option(`-F, --filepath`, `指定输出文件或仓库目录的路径`)
   .action((url: string, opts: GithubHelperOptions) => {
     opts.url = url;
-    githubHelper(opts).catch(e => console.error(e));
+    githubHelper(opts).catch((e) => console.error(e));
   });
 
 program
@@ -94,7 +94,7 @@ program
     if (config.debug) console.log(opts);
 
     if (opts.list) {
-      const list = Object.entries(config.run.cmds).map(d => `${color.greenBright(d[0])}  ${color.cyan(d[1].desc || '')}`);
+      const list = Object.entries(config.run.cmds).map((d) => `${color.greenBright(d[0])}  ${color.cyan(d[1].desc || '')}`);
       console.log(`可用的命令组：${color.cyanBright(`\n - ${list.join('\n - ')}`)}`);
       return;
     }
@@ -111,7 +111,7 @@ program
     }
 
     if (Array.isArray(opts.cmdGroup)) {
-      opts.cmdGroup.forEach(groupName => {
+      opts.cmdGroup.forEach((groupName) => {
         if (config.run.cmds[groupName]) cmds[groupName] = config.run.cmds[groupName];
         else console.warn(color.yellow(`未知的命令组：`), color.yellowBright(groupName));
       });
@@ -183,7 +183,7 @@ program
   .option('-i, --commit-id', '获取当前分支的 commitId')
   .option('-u, --upstream-id', '获取远端 upstream 的 commitId')
   .option('-e, --user-email', 'get user email')
-  .action(opts => {
+  .action((opts) => {
     const config = program.opts();
     // const config = await initConfig();
     if (config.debug) console.log(opts);

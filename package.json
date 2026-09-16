@@ -8,7 +8,7 @@
   "type": "module",
   "bin": {
     "githelper": "bin/githelper.js",
-    "gh": "bin/githelper.js"
+    "g": "bin/githelper.js"
   },
   "repository": "https://github.com/lzwme/git-helper.git",
   "author": {
@@ -36,50 +36,48 @@
     "start": "npm run watch",
     "build": "run-s clean && run-p build:*",
     "build:esm": "tsc -p tsconfig.module.json",
-    "lint": "flh --prettier --eslint --tscheck",
-    "fix": "run-s fix:*",
-    "fix:prettier": "prettier \"src/**/*.ts\" --write",
-    "fix:lint": "eslint src/**/*.ts --fix",
+    "lint": "npm run check:tsc && npm run fix",
+    "check:tsc": "tsc --noEmit",
+    "check": "biome check src/ scripts/ bin/",
+    "fix": "biome check --write src/ scripts/ bin/",
     "test": "run-s test:*",
-    "test:lint": "eslint src/**/*.ts",
-    "test:prettier": "prettier \"src/**/*.ts\" --list-different",
-    "test:unit": "npm run cov",
+    "test:lint": "biome check src/ scripts/ bin/",
+    "test:unit": "vitest run",
     "watch": "run-s clean && run-p \"watch:build\" \"watch:test\"",
     "watch:build": "npm run build:esm -- -w",
-    "watch:test": "pnpm jest --watch",
-    "cov": "pnpm jest --coverage",
+    "watch:test": "vitest --watch",
+    "cov": "vitest run --coverage",
     "doc": "typedoc src/ --exclude **/*.spec.ts --out docs",
     "version": "standard-version",
-    "prepare-release": "run-s build test doc:html version",
+    "prepare-release": "run-s build test doc version",
     "release": "run-s test build doc",
     "clean": "node scripts/rmdir.js ./esm ./docs"
   },
   "devDependencies": {
-    "@eslint/js": "^9.28.0",
-    "@jest/types": "^30.0.0",
+    "@biomejs/biome": "^2.5.14",
     "@lzwme/fed-lint-helper": "^2.6.6",
-    "@types/eslint": "^9.6.1",
-    "@types/jest": "^29.5.14",
     "@types/node": "^24.0.1",
-    "@typescript-eslint/eslint-plugin": "^8.34.0",
-    "@typescript-eslint/parser": "^8.34.0",
-    "eslint": "^9.28.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.1",
+    "@vitest/coverage-v8": "^5.0.1",
     "husky": "^9.1.7",
-    "jest": "^30.0.0",
+    "lint-staged": "^17.5.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^3.5.3",
     "standard-version": "^9.5.0",
-    "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.28.5",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.34.0"
+    "typedoc": "^0.28.20",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
   },
   "dependencies": {
-    "@lzwme/fe-utils": "^1.9.0",
-    "commander": "^14.0.0",
+    "@lzwme/fe-utils": "^1.9.2",
+    "commander": "^15.0.0",
     "console-log-colors": "^0.5.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "biome check --write --no-errors-on-unmatched"
+    ],
+    "*.{json,md}": [
+      "biome format --write --no-errors-on-unmatched"
+    ]
   }
 }

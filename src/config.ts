@@ -8,8 +8,8 @@
 
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { color } from 'console-log-colors';
 import { assign } from '@lzwme/fe-utils';
+import { color } from 'console-log-colors';
 import { pathToFileURL } from 'url';
 
 export interface IConfig {
@@ -88,7 +88,7 @@ async function loadConfigFile(configPath?: string, debug?: boolean) {
 export async function getConfig(options?: IConfig, useCache = true) {
   if (useCache) return config;
 
-  if (options && options.configPath) config.configPath = options.configPath;
+  if (options?.configPath) config.configPath = options.configPath;
 
   await loadConfigFile(config.configPath, true);
 

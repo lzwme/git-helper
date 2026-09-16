@@ -6,9 +6,9 @@
  * @Description: git commit 提交辅助工具
  */
 
-import { color } from 'console-log-colors';
 import { getHeadCommitId } from '@lzwme/fe-utils';
-import { getConfig, IConfig } from './config.js';
+import { color } from 'console-log-colors';
+import { getConfig, type IConfig } from './config.js';
 import { execSync, log } from './utils.js';
 
 function getGitHead(remote = false) {
@@ -78,8 +78,8 @@ export async function gitCommit(cfg?: IConfig) {
     // commitCfg.message && commitCfg.amend ? "git reset HEAD" : "",
     'git add --all',
     commit,
-    commitCfg.pull ? `git pull --rebase` + (config.debug ? ' -v' : '') : '',
-    commitCfg.push ? `git push` + (config.debug ? ' -v --progress' : '') + (config.force ? ' -f' : '') : '',
+    commitCfg.pull ? `git pull --rebase${config.debug ? ' -v' : ''}` : '',
+    commitCfg.push ? `git push${config.debug ? ' -v --progress' : ''}${config.force ? ' -f' : ''}` : '',
   ].filter(Boolean);
 
   for (const cmd of cmds) {

@@ -5,9 +5,12 @@ const start = () => {
   const list = process.argv
     .slice(2)
     .filter(Boolean)
-    .map(d => resolve(d));
-  list.forEach(dest => {
-    if (!existsSync(dest)) return console.log('指定的目录不存在：', dest);
+    .map((d) => resolve(d));
+  list.forEach((dest) => {
+    if (!existsSync(dest)) {
+      console.log('指定的目录不存在：', dest);
+      return;
+    }
     rmSync(dest, { recursive: true, force: true });
     console.log('目录已删除：', dest);
   });

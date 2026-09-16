@@ -6,8 +6,8 @@
  * @Description:
  */
 import { execSync as cpExecSync, type StdioOptions } from 'node:child_process';
-import { color } from 'console-log-colors';
 import { getLogger } from '@lzwme/fe-utils';
+import { color } from 'console-log-colors';
 import { config } from './config.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

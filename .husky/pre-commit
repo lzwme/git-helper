@@ -1,6 +1,1 @@
-pnpm exec flh --tscheck --eslint --only-changes --fix
-pnpm exec flh --prettier --only-changes --fix
-
-# npm run fix:prettier -- --cache
-# npm run test:lint
-# git add --update
+pnpm exec lint-staged

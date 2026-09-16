@@ -1,5 +1,5 @@
 // https://github.com/charlzyx/gitmd
-import { execSync, dateFormat, gitHasUnstagedChanges } from '@lzwme/fe-utils';
+import { dateFormat, execSync, gitHasUnstagedChanges } from '@lzwme/fe-utils';
 import { cyan, greenBright } from 'console-log-colors';
 import { logger } from './utils.js';
 

@@ -1,5 +1,10 @@
+import { describe, expect, it, type Mock, vi } from 'vitest';
 import * as gitUtils from './git-utils';
-import { execSync } from './utils';
+import { execSync } from './utils.js';
+
+vi.mock('./utils.js', () => ({
+  execSync: vi.fn(),
+}));
 
 const gitLogLine = [
   `a5840084eae998ee4a33ad091d004b9f856c1140`,
@@ -12,17 +17,11 @@ const gitLogLine = [
 ]
   .join(' _-_ ')
   .trim();
-const execSyncFn = execSync as jest.Mock;
 
-jest.mock(
-  './utils.js',
-  jest.fn(() => ({
-    execSync: jest.fn(),
-  }))
-);
+const execSyncFn = execSync as Mock;
 
 describe('git-utils', () => {
-  test('gitUtils.getGitLogList', () => {
+  it('gitUtils.getGitLogList', () => {
     execSyncFn.mockReturnValueOnce(gitLogLine);
     const res = gitUtils.getGitLogList(1);
     expect(res.length).toBe(1);

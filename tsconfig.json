@@ -4,7 +4,6 @@
   },
   "compilerOptions": {
     "alwaysStrict": true,
-    "baseUrl": ".",
     "skipLibCheck": true,
     "outDir": "esm",
     "strict": true,
@@ -14,7 +13,7 @@
     "noImplicitAny": false,
     "module": "ESNext",
     "target": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -25,7 +24,8 @@
     "declaration": true,
     "pretty": true,
     "lib": ["ESNext", "dom"],
-    "typeRoots": ["./typings", "./node_modules/@types"]
+    "typeRoots": ["./typings", "./node_modules/@types"],
+    "types": ["node"]
   },
   "exclude": ["esm", "cjs"],
   "compileOnSave": false

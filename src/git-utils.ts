@@ -51,7 +51,7 @@ export function getGitLogList(num = 1, cwd?: string) {
   const prettyFormat = ['H', 'h', 'T', 't', 'p', 'P', 'cd', 'ad', 'an', 'ae', 'ce', 's', 'ar', 'cr'];
   const cmd = `git log -${num} --pretty="tformat:%${prettyFormat.join(' _-_ %')}" --date=iso`;
   const list = execSync(cmd, 'pipe', cwd).trim().split('\n');
-  const result = list.map(line => {
+  const result = list.map((line) => {
     const valList = line.split(' _-_ ');
     return prettyFormat.reduce((r: Partial<GitLogItem>, key: string, idx: number) => {
       r[key] = valList[idx];
